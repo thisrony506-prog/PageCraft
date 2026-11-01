@@ -261,7 +261,7 @@ input[type=text]:focus,input[type=url]:focus,textarea:focus,select:focus{border-
 .liveTabs button{padding:7px 11px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);font-weight:600;font-size:12.5px;cursor:pointer}
 .liveTabs button:hover{border-color:var(--ink)}
 
-/* ===== AI (server proxy) ===== */
+/* ===== AI Assistant ===== */
 
 /* ===== Brand logo — PC monogram + PageCraft wordmark ===== */
 .brandSvg{display:block;flex:none}
@@ -616,7 +616,7 @@ button,a,input,select,textarea,label{touch-action:manipulation}
 @media (prefers-color-scheme: dark){.unitHint.warn{color:#FFD98A;background:#2A2105;border-color:#6b5518}}
 </style>
 <style>
-/* ===== v6 — hidden ad labels, custom ad placement anywhere, public URL, direct API key ===== */
+/* ===== v6 — hidden ad labels, custom ad placement anywhere, public URL ===== */
 .hideAdCard{border:2px solid var(--ink);border-radius:12px;padding:16px;margin:12px 0;background:var(--surface)}
 .hideAdCard h4{margin:0 0 4px;font-size:15.5px}
 .hideAdCard p{margin:0 0 10px;color:var(--muted);font-size:13.5px;line-height:1.55}
@@ -624,11 +624,6 @@ button,a,input,select,textarea,label{touch-action:manipulation}
 @media (prefers-color-scheme: dark){.publicBadge{background:#fff;color:#000}}
 .publicUrlBox{border:2px solid var(--ink);border-radius:12px;padding:16px;margin:12px 0;background:var(--surface)}
 .publicUrlBox .livePath{font-size:16px}
-.apiKeyBox{border:2px solid var(--ink);border-radius:12px;padding:16px;margin:14px 0;background:var(--surface)}
-.apiKeyBox h4{margin:0 0 4px;font-size:15.5px}
-.apiKeyBox p{margin:0 0 10px;color:var(--muted);font-size:13.5px;line-height:1.55}
-.apiKeyBox input[type=password],.apiKeyBox input[type=text]{font-family:ui-monospace,monospace;font-size:14px}
-.keyStatus{font-size:12.5px;font-weight:700;margin-top:8px}
 .customAdList{margin-top:10px}
 .adPosRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .liveAdLabel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#888;text-align:center;margin:4px 0 6px}
@@ -741,7 +736,7 @@ button,a,input,select,textarea,label{touch-action:manipulation}
           </div>
           <button class="btn" onclick="homeAiGenerate()">Generate My Page with AI</button>
           <button class="btn outline" onclick="openBuilder('blank');setTimeout(function(){switchTab('ai')},60)">Open AI in the Builder</button>
-          <p class="aiHomeNote">AI runs through this site's own secure server proxy — no key is ever asked from you. You can also ask AI to <b>edit</b> a page you already made: open the builder, go to the AI tab, and describe the change. If AI is not switched on for this site yet, the builder shows the setup guidance instead.</p>
+          <p class="aiHomeNote">The Assistant is built into PageCraft — no key is ever asked from you; just describe and build. You can also ask the Assistant to <b>edit</b> a page you already made: open the builder, go to the AI tab, and describe the change.</p>
         </div>
       </div>
     </section>
@@ -1055,18 +1050,7 @@ button,a,input,select,textarea,label{touch-action:manipulation}
       
       <div class="tabPane" id="tab-ai">
         <h3 style="margin-top:4px">Build &amp; edit with AI</h3>
-        <p style="color:var(--muted);font-size:14px">Describe what you want and AI drafts the page for you — headline, text, button, colour and feature cards — straight into this builder, ready to fine-tune. AI is powered by <b>Groq</b>: it normally runs through this site's server proxy, or you can paste your own Groq API key below to run AI directly from your browser — you can change or clear that key any time. <b>Strict rule:</b> AI does exactly what you describe and nothing more — it builds only what you ask for and never invents extra features, sections, buttons or information that is not in your description. The same rule applies to the home-page AI builder and to direct-key mode.</p>
-        <div class="apiKeyBox">
-          <h4>Run AI directly with your own Groq API key</h4>
-          <p>Paste a Groq API key (it starts with <b>gsk_</b>) and AI will call Groq directly from this browser, with no server proxy in between. Get a free key in the Groq console at <b>console.groq.com</b> (API Keys → Create API Key). The key is kept <b>only in memory for this session</b> — it is never saved to storage, never put in a published page, and disappears when you clear it or close the page. Change it whenever you like: clear the old one, paste the new one, press Use This Key.</p>
-          <label for="directApiKey">Your Groq API key</label>
-          <input type="password" id="directApiKey" placeholder="gsk_… paste your key here" autocomplete="off" spellcheck="false">
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button class="btn" style="padding:10px 16px" onclick="pcSetDirectKey()">Use This Key — Run Direct</button>
-            <button class="btn outline" style="padding:10px 16px" onclick="pcClearDirectKey()">Clear Key</button>
-          </div>
-          <div class="keyStatus" id="directKeyStatus">No direct key set — AI will try the server proxy.</div>
-        </div>
+        <p style="color:var(--muted);font-size:14px">Describe what you want and PageCraft's built-in Assistant drafts the page for you — headline, text, button, colour and feature cards — straight into this builder, ready to fine-tune. The Assistant is part of this website: it just works, and no key is ever asked from you. <b>Strict rule:</b> the Assistant does exactly what you describe and nothing more — it builds only what you ask for and never invents extra features, sections, buttons or information that is not in your description. The same rule applies to the home-page AI builder. If an answer ever comes back empty, the Assistant automatically tries once more before telling you.</p>
         <label>Create a new page with AI</label>
         <textarea id="aiPrompt" placeholder="e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
         <button class="btn" style="width:100%;margin-top:10px" id="aiGenBtn" onclick="aiGenerate()">Generate Page with AI</button>
@@ -1251,12 +1235,14 @@ function slugify(s){return (s||"my-page").toLowerCase().trim().replace(/[^a-z0-9
 
 function renderPills(){document.getElementById("catPills").innerHTML=CATEGORIES.map(function(c){return '<button class="pill '+(c===activeCat?"active":"")+'" onclick="setCat(\''+c+'\')">'+c+'</button>';}).join("");}
 function setCat(c){activeCat=c;renderPills();renderGallery();}
-/* ---- AI via admin server proxy (/api/groq). The browser sends only the prompt — no key in the browser, ever. ---- */
-var AI_ENDPOINT="/api/groq";
-var AI_SETUP_MSG='AI is not set up yet. AI runs on a server-side Groq key (the GROQ_API_KEY environment variable) through this site\'s own /api/groq proxy, so no key is ever asked from visitors. Until that server setup is done, AI stays off.';
+/* ---- PageCraft Assistant. The browser sends only the prompt to this site's
+   own assistant endpoint — no key is ever in the browser or asked from users,
+   and no provider is ever named in the UI. ---- */
+var AI_ENDPOINT="/api/assistant";
+var AI_SETUP_MSG='The PageCraft Assistant is not available right now. Please try again later.';
 function aiShowStatus(html){var st=document.getElementById("aiStatus");if(st)st.innerHTML=String(html).replace(/<\/b><br\s*\/?>/gi,"</b>");}
-var AI_SETUP_HTML='<div class="aiErr setup"><b>AI is not set up on the server yet.</b><br>AI runs through this site\'s own <b>/api/groq</b> server proxy with the admin\'s Groq key stored as the <b>GROQ_API_KEY</b> environment variable on the hosting (Vercel) — never in this page and never asked from visitors.<br><b>To switch it on:</b> 1) Add the <span style="font-family:ui-monospace,monospace">api/groq.js</span> proxy file to the site, 2) set <b>GROQ_API_KEY</b> in the hosting project settings (a Groq key from console.groq.com — it starts with <b>gsk_</b>), 3) redeploy. Then press <b>Check AI Status</b> here.</div>';
-function aiSetupMsg(){aiShowStatus(AI_SETUP_HTML);toast("AI not set up yet — server setup needed");}
+var AI_SETUP_HTML='<div class="aiErr setup"><b>The PageCraft Assistant isn\'t available right now.</b><br>The Assistant is switched off or still being set up for this site, so AI generation is paused. Everything else in the builder works as normal — you can build and edit your page by hand, and try the Assistant again later.</div>';
+function aiSetupMsg(){aiShowStatus(AI_SETUP_HTML);toast("The Assistant isn't available right now");}
 function aiNetMsg(detail){aiShowStatus('<div class="aiErr net"><b>Network problem — AI could not be reached.</b><br>'+esc(detail||"Check your internet connection and try again. If you are offline, reconnect first.")+'</div>');toast("Network problem — AI not reached");}
 function aiBusy(msg){aiShowStatus('<div class="aiErr busy" role="status"><b>Working on it</b>'+esc(msg)+'</div>');}
 function aiSetBusy(on){
@@ -1269,7 +1255,7 @@ function aiExtractText(data){
  try{var ch=data.choices&&data.choices[0];if(ch&&ch.message&&typeof ch.message.content==="string")return ch.message.content;if(ch&&typeof ch.text==="string")return ch.text;}catch(e){}
  return "";
 }
-function aiCall(promptText,done){
+function aiCall(promptText,done,retried){
  var finished=false;
  var finish=function(){if(!finished){finished=true;aiSetBusy(false);}};
  var ctrl=("AbortController" in window)?new AbortController():null;
@@ -1286,17 +1272,21 @@ function aiCall(promptText,done){
    var looksHtml=/^\s*</.test(r.raw||"")||r.ctype.indexOf("text/html")>-1;
    if(r.status===404||r.status===501||looksHtml){aiSetupMsg();return;}
    var data=null;try{data=JSON.parse(r.raw);}catch(e){}
-   if(!data){aiShowStatus('<div class="aiErr net"><b>The AI server replied in a format that could not be read.</b><br>Try again. If this keeps happening, the /api/groq proxy needs checking on the server.</div>');return;}
+   if(!data){aiShowStatus('<div class="aiErr net"><b>The Assistant replied in a format that could not be read.</b><br>Nothing was changed. Please try again.</div>');return;}
    if(r.status>=400||data.error){
      var detail=String((data.error&&(data.error.message||data.error))||("Server error "+r.status));
-     if(/key|GROQ|quota|permission|unauthenticated|api key/i.test(detail)){aiSetupMsg();return;}
      var friendly=/bad_ai_response|invalid|parse|unexpected token|json/i.test(detail)
        ?"The AI sent back a reply that could not be turned into a page, so nothing was changed. Please try again — a shorter, clearer description usually fixes it."
        :"The AI service could not finish that request just now, so nothing was changed. Wait a moment and try again.";
      aiShowStatus('<div class="aiErr net" role="alert"><b>AI could not complete that</b>'+friendly+'</div>');return;
    }
    var text=aiExtractText(data);
-   if(!text){aiShowStatus('<div class="aiErr net"><b>AI replied with an empty answer.</b><br>Try again with a clearer description.</div>');return;}
+   if(!text){
+     /* An empty answer must never just sit there blank: ask once more on its
+        own, and only if that also comes back empty show a clear message. */
+     if(!retried){aiSetBusy(true);aiBusy("The Assistant came back with an empty answer — asking once more…");aiCall(promptText,done,true);return;}
+     aiShowStatus('<div class="aiErr net"><b>The Assistant couldn\'t produce an answer this time.</b><br>It was asked twice and both answers came back empty, so nothing was changed. Please press Generate again — or describe the page a little differently.</div>');return;
+   }
    done(text);
  }).catch(function(err){
    if(timer)clearTimeout(timer);finish();
@@ -1410,9 +1400,9 @@ function aiCheck(){
    var looksHtml=/^\s*</.test(r.raw||"")||r.ctype.indexOf("text/html")>-1;
    if(r.status===404||r.status===501||looksHtml){aiSetupMsg();return;}
    var data=null;try{data=JSON.parse(r.raw);}catch(e){}
-   if(data&&!data.error&&r.status<400&&(aiExtractText(data)||data.ok)){aiShowStatus('<div class="aiErr ok"><b>AI is ready.</b><br>The server proxy answered correctly — describe a page above and press Generate, or give an edit instruction.</div>');toast("AI is ready");}
+   if(data&&!data.error&&r.status<400&&(aiExtractText(data)||data.ok)){aiShowStatus('<div class="aiErr ok"><b>AI is ready.</b><br>The Assistant answered correctly — describe a page above and press Generate, or give an edit instruction.</div>');toast("AI is ready");}
    else if(data&&data.error){aiSetupMsg();}
-   else{aiShowStatus('<div class="aiErr net"><b>The AI endpoint answered, but not in the expected format.</b><br>The /api/groq proxy on the server needs checking.</div>');}
+   else{aiShowStatus('<div class="aiErr net"><b>The Assistant answered, but not in the expected format.</b><br>Nothing was changed. Please try again in a moment.</div>');}
  })
  .catch(function(err){if(timer)clearTimeout(timer);aiSetBusy(false);if(err&&err.name==="AbortError"){aiNetMsg("The status check timed out. Check your connection and try again.");}else{aiNetMsg("The browser could not reach the AI service. Check your internet connection and try again.");}});
 }
@@ -2142,7 +2132,7 @@ enableDesktopMode=function(){
 };
 </script>
 <script>
-/* ===== v6 — drag-to-place (per device), direct API key ===== */
+/* ===== v6 — drag-to-place (per device) ===== */
 
 /* ---- Drag to place: every element, saved separately for Desktop + Mobile ---- */
 var dragMode=false;
@@ -2190,60 +2180,6 @@ function toggleDragMode(forceOn){
  pv.addEventListener("pointercancel",endDrag);
 })();
 
-/* ---- Direct Groq API key (memory only, changeable any time) ---- */
-var pcDirectApiKey="";
-var PC_GROQ_MODELS=["llama-3.3-70b-versatile","llama-3.1-8b-instant"];
-function pcKeyStatus(txt){var el=document.getElementById("directKeyStatus");if(el)el.textContent=txt;}
-function pcSetDirectKey(){
- var inp=document.getElementById("directApiKey");var v=((inp&&inp.value)||"").trim();
- if(!v){toast("Paste your Groq API key first","warn");if(inp)inp.focus();return;}
- pcDirectApiKey=v;
- pcKeyStatus("Direct key is set for this session — AI now runs on Groq directly from your browser. You can change it any time: paste a new key and press Use This Key, or clear it to go back to the server proxy."+(/^gsk_/.test(v)?"":" Note: this key does not start with gsk_, so Groq will likely reject it — a real Groq API key starts with gsk_."));
- toast(/^gsk_/.test(v)?"Direct API key set — AI will run directly on Groq":"Key set, but it does not look like a Groq key (it should start with gsk_)");
- aiShowStatus('<div class="aiErr ok"><b>Direct key ready.</b><br>AI will now call Groq directly from your browser with the key you just set. Describe a page above and press Generate. To change the key later, paste the new one above and press Use This Key again.</div>');
-}
-function pcClearDirectKey(){
- pcDirectApiKey="";var inp=document.getElementById("directApiKey");if(inp)inp.value="";
- pcKeyStatus("No direct key set — AI will try the server proxy.");
- toast("Direct API key cleared — AI will use the server proxy");
-}
-function pcDirectCall(promptText,done,attempt){
- attempt=attempt||0;
- var model=PC_GROQ_MODELS[attempt];
- var ctrl=("AbortController" in window)?new AbortController():null;
- var timer=ctrl?setTimeout(function(){try{ctrl.abort();}catch(e){}},45000):null;
- fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+pcDirectApiKey},body:JSON.stringify({model:model,messages:[{role:"user",content:promptText}],temperature:0.6}),signal:ctrl?ctrl.signal:undefined})
- .then(function(res){return res.text().then(function(raw){return{status:res.status,raw:raw};});})
- .then(function(r){
-   if(timer)clearTimeout(timer);aiSetBusy(false);
-   var data=null;try{data=JSON.parse(r.raw);}catch(e){}
-   if(r.status===404&&attempt<PC_GROQ_MODELS.length-1){aiSetBusy(true);pcDirectCall(promptText,done,attempt+1);return;}
-   if(r.status>=400||!data||data.error){
-     var msg=(data&&data.error&&(data.error.message||data.error.code))||("Groq returned status "+r.status);
-     if(r.status===401||/invalid api key|invalid.*key|unauthorized/i.test(String(msg))){aiShowStatus('<div class="aiErr setup"><b>Groq rejected that direct key.</b><br>The key you pasted is not a valid Groq API key. A real key starts with <b>gsk_</b> and is created in the Groq console at console.groq.com under API Keys. Paste the correct key in the Direct API Key box above, press Use This Key, and try again — or clear the key to use the server proxy.</div>');pcKeyStatus("The last direct key was rejected by Groq — paste a valid gsk_ key and press Use This Key.");toast("Groq rejected that key — check it and try again","error");return;}
-     if(r.status===429){aiNetMsg("Groq rate limit reached for that key. Wait a moment and try again, or check the usage limits in the Groq console.");return;}
-     aiNetMsg("Groq direct call failed: "+msg);return;
-   }
-   var text=aiExtractText(data);
-   if(!text){aiShowStatus('<div class="aiErr net"><b>AI replied with an empty answer.</b><br>Try again with a clearer description.</div>');return;}
-   done(text);
- })
- .catch(function(err){if(timer)clearTimeout(timer);aiSetBusy(false);if(err&&err.name==="AbortError"){aiNetMsg("The AI took too long to answer (45 seconds) and the request was stopped.");}else{aiNetMsg("The browser could not reach Groq directly. Check your internet connection and try again.");}});
-}
-var pcOrigAiCallV6=aiCall;
-aiCall=function(promptText,done){
- if(pcDirectApiKey){pcDirectCall(promptText,done,0);return;}
- pcOrigAiCallV6(promptText,done);
-};
-var pcOrigAiCheckV6=aiCheck;
-aiCheck=function(){
- if(pcDirectApiKey){
-   aiSetBusy(true);aiBusy("Checking your direct Groq key…");
-   pcDirectCall('Reply with ONLY this JSON: {"ok":true}',function(){aiShowStatus('<div class="aiErr ok"><b>AI is ready — direct key works.</b><br>Your own Groq key answered correctly from this browser. Describe a page above and press Generate, or give an edit instruction.</div>');toast("AI is ready — direct key works");});
-   return;
- }
- pcOrigAiCheckV6();
-};
 /* Keep the Hide Names toggle and Custom Ad list in sync whenever the builder opens */
 var pcOpenBuilderV6=openBuilder;
 openBuilder=function(id){pcOpenBuilderV6(id);syncHideAdBtn();renderCustomAdList();};
