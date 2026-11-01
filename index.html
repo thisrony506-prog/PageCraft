@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>PageCraft — Landing Page Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&family=Manrope:wght@500;700;800&family=Playfair+Display:wght@700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F7F3;--surface:#FFFFFF;--surface2:#EEF1EA;--ink:#101613;--muted:#5B665E;--line:#DDE3D9;--accent:#0A7A5E;--accent-dark:#075E48;--amber:#E8A317;--amber-bg:#FFF3D6;--radius:18px;--shadow:0 10px 30px rgba(16,22,19,.08)}
+@media (prefers-color-scheme: dark){:root{--bg:#0E120F;--surface:#171C18;--surface2:#1E2520;--ink:#EEF2ED;--muted:#A8B3A9;--line:#2A332C;--shadow:0 10px 30px rgba(0,0,0,.35)}}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:inherit} button,input,select,textarea{font:inherit}
+.topbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:12px;flex-wrap:wrap}
+.logo{font-family:Fraunces,serif;font-weight:800;font-size:26px;letter-spacing:-.02em}.logo span{color:var(--accent)}
+.nav{display:flex;gap:6px;flex-wrap:wrap}.nav button{border:1px solid var(--line);background:transparent;padding:8px 13px;border-radius:999px;font-weight:600;cursor:pointer;color:var(--ink)}.nav button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{background:var(--accent);color:#fff;border:0;padding:11px 18px;border-radius:999px;font-weight:700;cursor:pointer}.btn:hover{background:var(--accent-dark)} .btn.outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink)} .btn.dark{background:var(--ink);color:#fff} .btn:disabled{opacity:.45;cursor:not-allowed}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.hero{padding:36px 0 10px;display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}}
+.hero h1{font-family:Fraunces,serif;font-size:clamp(34px,5vw,56px);line-height:.95;letter-spacing:-.03em;margin:10px 0 14px}
+.hero p{color:var(--muted);font-size:17px;max-width:560px}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:var(--amber-bg);color:#7A5A00;border:1px solid #F0D48A;padding:6px 10px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.heroCard{background:var(--ink);color:#fff;border-radius:22px;padding:20px}
+.heroCard h3{margin:4px 0 6px;font-size:19px}.heroCard p{color:#CBD5CB;font-size:14px}
+.statRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}.stat{background:rgba(255,255,255,.09);border-radius:14px;padding:12px}.stat b{font-size:20px;display:block}
+.searchBar{display:flex;gap:10px;margin:18px 0 10px;flex-wrap:wrap}.searchBar input{flex:1;min-width:220px;padding:13px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.pill{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;cursor:pointer;color:var(--ink)}.pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-bottom:28px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:560px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.mock{height:168px;padding:16px;position:relative;overflow:hidden}
+.mock .bar{height:10px;border-radius:99px;background:rgba(0,0,0,.18);margin-bottom:8px}
+.mock .title{height:18px;width:72%;background:rgba(0,0,0,.32);border-radius:6px;margin:12px 0 8px}.mock .line{height:9px;width:88%;background:rgba(0,0,0,.16);border-radius:99px;margin:6px 0}.mock .cta{margin-top:14px;display:inline-block;padding:8px 14px;border-radius:999px;background:#111;color:#fff;font-size:12px;font-weight:700}
+.badge{position:absolute;top:12px;right:12px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em}.badge.free{background:#DFF5EC;color:#075E48}.badge.pro{background:#111;color:#FFD166}
+.cardBody{padding:16px}.cardBody h3{margin:2px 0 4px;font-size:17px}.cardBody p{margin:0;color:var(--muted);font-size:14px;min-height:42px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px;flex-wrap:wrap}.cat{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.hostChip{font-size:11px;font-weight:700;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.blankCard{border:2px dashed var(--accent);background:color-mix(in srgb, var(--accent) 7%, var(--surface));display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:22px;min-height:300px}
+.blankCard h3{font-family:Fraunces,serif;font-size:28px;margin:6px 0}.blankCard p{color:var(--muted)}
+/* BUILDER */
+.builder{display:none;padding:18px 0 40px}.builder.show{display:block}
+.builderHead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.builderHead h2{font-family:Fraunces,serif;font-size:30px;margin:2px 0}.builderHead p{color:var(--muted);margin:0}
+.builderGrid{display:grid;grid-template-columns:370px 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.builderGrid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow:auto}.tabs button{flex:1;white-space:nowrap;padding:12px 8px;background:transparent;border:0;border-bottom:3px solid transparent;font-weight:700;cursor:pointer;font-size:13.5px;color:var(--ink)}.tabs button.active{border-bottom-color:var(--accent);color:var(--accent)}
+.tabPane{display:none;padding:16px}.tabPane.active{display:block}
+label{font-size:12.5px;font-weight:700;letter-spacing:.02em;display:block;margin:14px 0 6px;color:var(--muted);text-transform:uppercase}
+input[type=text],input[type=url],textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+textarea{resize:vertical;min-height:74px} textarea.code{font-family:ui-monospace,monospace;font-size:12px;min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.swatchRow{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}.swatch.sel{border-color:var(--ink);outline:2px solid var(--surface)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}.seg button{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;cursor:pointer;color:var(--ink)}.seg button.active{background:var(--ink);color:var(--bg)}
+.blockItem{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;justify-content:space-between;gap:8px;align-items:center;background:var(--bg)}.blockItem b{font-size:13.5px}.blockItem span{font-size:12px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.iconBtn{border:1px solid var(--line);background:var(--surface);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--ink)}
+.adBox{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:var(--bg)}.adBox h4{margin:0 0 2px;font-size:15px}.adBox p{margin:0 0 8px;color:var(--muted);font-size:13px}
+.adBox select{margin-bottom:8px}
+.status{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--surface2);color:var(--ink)} .status.on{background:#DFF5EC;color:#075E48}
+.devBox{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:12px 0;background:var(--bg)}.devBox h4{margin:0 0 4px;font-size:15px}.devBox .hint{color:var(--muted);font-size:12.5px;margin:0}
+.devBox label{margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=color]{width:52px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:2px;cursor:pointer}
+.colorRow{display:flex;align-items:center;gap:10px}.colorRow span{font-size:13px;color:var(--muted)}
+/* PREVIEW */
+.previewWrap{position:sticky;top:76px;min-width:0}
+@media(max-width:900px){.previewWrap{position:static}}
+.previewBar{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;padding:10px 12px;gap:8px;flex-wrap:wrap}
+.urlPill{flex:1;min-width:140px;text-align:center;background:var(--surface2);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deviceBtns{display:flex;gap:6px}.deviceBtns button{padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;font-weight:600;cursor:pointer;color:var(--ink)}.deviceBtns button.active{background:var(--ink);color:var(--bg)}
+.phoneFrame{background:#111;padding:10px;border-radius:0 0 18px 18px;transition:max-width .25s ease,border-radius .25s ease;margin:0 auto;position:relative}
+.phoneFrame.desktop{max-width:100%}
+.phoneFrame.mobile{max-width:400px;border-radius:0 0 34px 34px;padding:12px 12px 16px;box-shadow:0 24px 50px rgba(0,0,0,.28)}
+.notch{display:none;width:110px;height:20px;background:#111;border-radius:0 0 14px 14px;margin:-2px auto 6px;position:relative;z-index:2}
+.phoneFrame.mobile .notch{display:block}
+#livePreview{background:#fff;color:#111;border-radius:12px;overflow:hidden;min-height:560px}
+.phoneFrame.mobile #livePreview{border-radius:22px;min-height:600px}
+#livePreview.inlineOn [data-inline]{cursor:pointer;outline:2px dashed rgba(10,122,94,.0);outline-offset:2px;transition:outline-color .15s}
+#livePreview.inlineOn [data-inline]:hover{outline-color:rgba(10,122,94,.65)}
+#livePreview.inlineOn [data-inline].selEl{outline:2px solid var(--accent);outline-offset:2px}
+.inlineBar{background:var(--surface);border:1px solid var(--accent);border-radius:16px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.inlineBar h4{margin:0 0 2px;font-size:15px}.inlineBar .hint{color:var(--muted);font-size:12.5px;margin:0 0 6px}
+.inlineBar label{margin-top:10px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:8px 0 34px}@media(max-width:700px){.features{grid-template-columns:1fr}}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}.feat h3{margin:6px 0}.feat p{color:var(--muted);margin:0;font-size:14px}
+.notice{background:var(--amber-bg);border:1px solid #EED48A;color:#5C4700;border-radius:12px;padding:12px 14px;font-size:13.5px;margin:12px 0}
+.publishCard{border:1.5px solid var(--accent);border-radius:14px;padding:14px;background:color-mix(in srgb, var(--accent) 6%, var(--surface))}
+.livePath{font-family:ui-monospace,monospace;font-weight:700;font-size:15px;background:var(--surface2);border-radius:10px;padding:10px 12px;word-break:break-all}
+.hostedCard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.hostedCard h3{margin:2px 0 4px;font-size:16px}.hostedCard p{margin:0;color:var(--muted);font-size:13px;word-break:break-all}
+footer{border-top:1px solid var(--line);padding:22px 0 30px;color:var(--muted);font-size:13.5px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:92vw;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* --- Feature highlights (all editable in builder) --- */
+.featureStrip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:26px 0 8px}
+@media(max-width:1000px){.featureStrip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.featureStrip{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.featureStrip{grid-template-columns:1fr}}
+.fHighlight{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 14px;text-align:left}
+.fHighlight .fic{width:38px;height:38px;border-radius:11px;background:color-mix(in srgb, var(--accent) 12%, var(--surface));display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:10px;color:var(--accent);font-weight:800}
+.fHighlight h3{margin:0 0 4px;font-size:15.5px;line-height:1.2}.fHighlight p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.45}
+.fHighlight .editTag{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+/* --- Deploy / Hosting --- */
+.deployGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0 28px}@media(max-width:820px){.deployGrid{grid-template-columns:1fr}}
+.deployCard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.deployCard h3{margin:0 0 6px;font-size:18px}.deployCard p,.deployCard li{color:var(--muted);font-size:14px}.deployCard ol{margin:8px 0 0;padding-left:20px}.deployCard li{margin:7px 0;color:var(--ink)}.deployCard li span{color:var(--muted)}
+.codeBox{background:#0E120F;color:#D1FAE5;border-radius:12px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:10px 0;overflow:auto}
+html{scroll-behavior:smooth}
+/* --- Builder: presets + feature editor --- */
+.presetGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 6px}
+.presetBtn{border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:10px;text-align:left;cursor:pointer;color:var(--ink)}
+.presetBtn:hover{border-color:var(--accent)}.presetBtn b{font-size:13.5px;display:block}.presetBtn span{font-size:12px;color:var(--muted);display:block}.presetBtn .dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:5px;border:1px solid rgba(0,0,0,.15)}
+.featEditorItem{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--bg)}
+.featEditorItem input[type=text]{margin-bottom:6px}
+#livePreview a[data-inline="cta"]{transition:box-shadow .25s ease,filter .25s ease,transform .25s ease}
+#livePreview a[data-inline="cta"]:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.card{transition:transform .2s ease,box-shadow .2s ease}.card:hover{transform:translateY(-3px)}
+@media (prefers-reduced-motion: reduce){.card,#livePreview a[data-inline="cta"]{transition:none}.card:hover{transform:none}}
+/* LIVE HOSTED VIEW */
+.liveView{display:none;min-height:100vh;background:#fff}
+.liveView.show{display:block}
+.liveBar{position:sticky;top:0;z-index:40;background:#101613;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;flex-wrap:wrap}
+.liveBar .path{font-family:ui-monospace,monospace;font-size:13px;color:#CBD5CB;word-break:break-all}
+.liveBar button{background:#fff;color:#111;border:0;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer}
+#liveCanvas{min-height:calc(100vh - 52px)}
+.liveAd:empty{display:none}
+@media(max-width:560px){
+ .topbar{padding:10px 12px}.logo{font-size:22px}.topbar .btn{padding:9px 13px;font-size:14px}
+ .hero{padding:24px 0 6px}.builderHead h2{font-size:24px}
+ .previewBar{border-radius:14px 14px 0 0}
+ #livePreview{min-height:480px}
+ .builderHead .btn{flex:1}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">Page<span>Craft</span></div>
+  <nav class="nav">
+    <button class="active" onclick="showHome()">Templates</button>
+    <button onclick="openBuilder('blank')">+ Create</button>
+    <button onclick="gotoMyPages()">My Pages</button>
+    <button onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works</button>
+    <button onclick="document.getElementById('deploy').scrollIntoView({behavior:'smooth'})">GitHub + Vercel</button>
+  </nav>
+  <button class="btn" onclick="openBuilder('blank')">Start Blank Page →</button>
+</header>
+
+<main id="homeView">
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <span class="kicker">✦ Free templates • No coding needed</span>
+        <h1>Build a landing page<br>exactly your way.</h1>
+        <p>Pick a ready template — Adsterra marketing, portfolio, job, e-commerce and more — or start from a blank page. Design the <b>desktop and mobile versions separately</b>, change <b>every headline, feature, font, colour and button</b> right inside the big preview, add ad codes from any network, then publish here — and host the site itself on <b>GitHub + Vercel</b> with the setup below.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+          <button class="btn" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">Browse Templates</button>
+          <button class="btn outline" onclick="openBuilder('blank')">＋ Start from Blank Page</button>
+        </div>
+        <div class="searchBar">
+          <input id="searchInput" type="text" placeholder="Search templates — try “portfolio”, “adsterra”, “shop”…" oninput="renderGallery()">
+        </div>
+        <div class="pills" id="catPills"></div>
+      </div>
+      <div class="heroCard">
+        <div style="font-size:28px">🧩</div>
+        <h3>Create in 3 ways</h3>
+        <p><b style="color:#fff">1. Template</b> — choose &amp; customise &nbsp;•&nbsp; <b style="color:#fff">2. Blank Page</b> — add your own blocks &nbsp;•&nbsp; <b style="color:#fff">3. Publish</b> — host it live on this domain, no file download needed.</p>
+        <div class="statRow">
+          <div class="stat"><b>9</b><span style="font-size:12px;color:#CBD5CB">Templates</span></div>
+          <div class="stat"><b>2</b><span style="font-size:12px;color:#CBD5CB">Device designs</span></div>
+          <div class="stat"><b>6</b><span style="font-size:12px;color:#CBD5CB">Ad slots</span></div>
+        </div>
+        <button class="btn" style="width:100%;margin-top:16px;background:#fff;color:#111" onclick="openBuilder('adsterra-pro')">Try Adsterra Template →</button>
+      </div>
+    </section>
+
+    <section aria-label="Highlights — all editable in the builder">
+      <div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-top:8px">
+        <h2 style="font-family:Fraunces,serif;font-size:28px;margin:0">Built into every page — and fully changeable</h2>
+        <span style="font-size:13px;color:var(--muted)">✎ Every title &amp; line below is editable in the builder — click any feature card in the preview, or use Content → Features.</span>
+      </div>
+      <div class="featureStrip">
+        <div class="fHighlight"><div class="fic">⚡</div><h3>Fast Setup</h3><p>Live in minutes, no coding needed.</p></div>
+        <div class="fHighlight"><div class="fic">▣</div><h3>Mobile First</h3><p>Perfect on every screen size.</p></div>
+        <div class="fHighlight"><div class="fic">◎</div><h3>Clear CTA</h3><p>One goal, one action, more results.</p></div>
+        <div class="fHighlight"><div class="fic">✓</div><h3>Fast &amp; Easy</h3><p>Everything on this page is set up and ready — customise the text and make it yours.</p></div>
+        <div class="fHighlight"><div class="fic">✓</div><h3>Mobile Friendly</h3><p>Looks perfect on phone, tablet and desktop, so no visitor is ever lost.</p></div>
+      </div>
+    </section>
+
+    <section id="gallery"><div class="grid" id="templateGrid"></div></section>
+
+    <section id="myPages" style="display:none">
+      <h2 style="font-family:Fraunces,serif;font-size:30px;margin:18px 0 6px">My hosted pages</h2>
+      <p style="color:var(--muted);margin:0 0 14px">Pages you published from the builder — live on this PageCraft domain. Phone visitors see the mobile design, computer visitors see the desktop design.</p>
+      <div class="grid" id="hostedGrid"></div>
+    </section>
+
+    <section id="how">
+      <h2 style="font-family:Fraunces,serif;font-size:30px;margin:18px 0 12px">How PageCraft works</h2>
+      <div class="features">
+        <div class="feat"><div style="font-size:24px">🎨</div><h3>1. Design both devices</h3><p>Switch the preview between Desktop and Mobile and design each one separately — layout, headline size, spacing and columns. Or click anything in the big preview and edit its text, font, colour, image and button style right there.</p></div>
+        <div class="feat"><div style="font-size:24px">📢</div><h3>2. Add ads from any network</h3><p>Adsterra, Google AdSense, PropellerAds, Monetag or any other network — paste each code into its own slot: popunder, top banner, in-content, native, social bar and sticky footer.</p></div>
+        <div class="feat"><div style="font-size:24px">🚀</div><h3>3. Publish &amp; host here</h3><p>One click in the Publish tab puts your page live on this PageCraft domain at your own page address. Templates stay on PageCraft — they are hosted, never downloaded.</p></div>
+      </div>
+      <div class="notice"><b>Free &amp; Pro:</b> Templates marked <b>Free</b> are fully usable. Templates marked <b>Pro</b> open in the builder so you can design with them; hosted Pro pages keep a small “Made with PageCraft” line in this free version. <b>Templates cannot be downloaded</b> — every page is hosted on this domain instead.</div>
+    </section>
+
+    <section id="deploy">
+      <h2 style="font-family:Fraunces,serif;font-size:30px;margin:26px 0 4px">Host it yourself — GitHub + Vercel setup</h2>
+      <p style="color:var(--muted);margin:0;max-width:720px">This site is a single static <b>index.html</b> — no build step, no server. That makes it ready for GitHub + Vercel: push the file to a repo, import the repo in Vercel, and you are live. Use the same setup for any PageCraft project you maintain in code.</p>
+      <div class="deployGrid">
+        <div class="deployCard">
+          <h3>① Push to GitHub</h3>
+          <ol>
+            <li>Create a new repository on GitHub — e.g. <b>pagecraft</b> (Public, no template).</li>
+            <li>Add <b>index.html</b> at the repo root <span>— this file. Keep assets, if any, in an <b>assets/</b> folder at the root.</span></li>
+            <li>Add the <b>vercel.json</b> on the right <span>at the root, next to index.html.</span></li>
+            <li>Commit &amp; push <span>— every later push will auto-redeploy.</span></li>
+          </ol>
+          <div class="codeBox">git init
+git add index.html vercel.json
+git commit -m "PageCraft — first deploy"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/pagecraft.git
+git push -u origin main</div>
+          <button class="btn outline" style="padding:9px 14px" onclick="copyText(document.getElementById('ghCmd').textContent,'Git commands copied')">Copy git commands</button>
+          <span id="ghCmd" style="display:none">git init
+git add index.html vercel.json
+git commit -m "PageCraft — first deploy"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/pagecraft.git
+git push -u origin main</span>
+        </div>
+        <div class="deployCard">
+          <h3>② Deploy on Vercel</h3>
+          <ol>
+            <li>Vercel → <b>Add New → Project</b> → Import your GitHub repo.</li>
+            <li>Framework Preset: <b>Other</b> <span>• Build Command: leave empty • Output Directory: leave empty (root).</span></li>
+            <li>Click <b>Deploy</b> — live in under a minute at <b>your-project.vercel.app</b>.</li>
+            <li>Optional: Settings → Domains → add your custom domain.</li>
+          </ol>
+          <label style="margin-top:14px">vercel.json — copy &amp; save at repo root</label>
+          <div class="codeBox" id="vercelJsonBox">{
+  "cleanUrls": true,
+  "trailingSlash": false
+}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" style="padding:9px 14px" onclick="copyText(document.getElementById('vercelJsonBox').textContent,'vercel.json copied — paste it into a file named vercel.json')">Copy vercel.json</button>
+            <button class="btn outline" style="padding:9px 14px" onclick="openBuilder('blank')">Open Builder → Customise First</button>
+          </div>
+          <p style="margin-top:12px">No environment variables, no database, no build command needed — it is a static site.</p>
+        </div>
+      </div>
+    </section>
+    <footer>PageCraft — Create • Customise • Publish &nbsp;•&nbsp; Ad networks are third-party services; use your own account codes in your hosted pages.</footer>
+  </div>
+</main>
+
+<!-- BUILDER -->
+<main id="builderView" class="builder wrap">
+  <div class="builderHead">
+    <div><button class="btn outline" style="padding:8px 13px" onclick="showHome()">← Back to Templates</button>
+    <h2 id="builderTitle">Blank Page Builder</h2><p id="builderSub">Add blocks, style your page and preview it live.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn dark" onclick="viewLiveCurrent()">👁 View Live Page</button>
+      <button class="btn" onclick="switchTab('publish')">🚀 Publish / Host</button>
+    </div>
+  </div>
+
+  <div class="builderGrid">
+    <div class="panel">
+      <div class="tabs">
+        <button class="active" data-tab="content" onclick="switchTab('content')">Content</button>
+        <button data-tab="design" onclick="switchTab('design')">Design</button>
+        <button data-tab="blocks" onclick="switchTab('blocks')">Blocks</button>
+        <button data-tab="ads" onclick="switchTab('ads')">Ads</button>
+        <button data-tab="publish" onclick="switchTab('publish')">Publish</button>
+        <button data-tab="deploy" onclick="switchTab('deploy')">GitHub + Vercel</button>
+      </div>
+
+      <div class="tabPane active" id="tab-content">
+        <label>Page title (browser / SEO)</label><input type="text" id="f_pageTitle" oninput="upd('pageTitle',this.value)">
+        <label>Badge / Eyebrow text</label><input type="text" id="f_badge" oninput="upd('badge',this.value)">
+        <label>Main headline</label><textarea id="f_headline" oninput="upd('headline',this.value)"></textarea>
+        <label>Sub-headline / Description</label><textarea id="f_sub" oninput="upd('sub',this.value)"></textarea>
+        <div class="row2"><div><label>Button text</label><input type="text" id="f_ctaText" oninput="upd('ctaText',this.value)"></div><div><label>Button link</label><input type="url" id="f_ctaUrl" oninput="upd('ctaUrl',this.value)"></div></div>
+        <label>Hero image URL</label><input type="url" id="f_image" placeholder="https://…" oninput="upd('image',this.value)">
+        <label>Or upload an image</label><input type="file" accept="image/*" onchange="onUpload(this)">
+        <label>Image caption / alt text</label><input type="text" id="f_imageAlt" oninput="upd('imageAlt',this.value)">
+        <label>Footer line on your page</label><input type="text" id="f_footerText" placeholder="e.g. © 2026 My Brand — All rights reserved" oninput="upd('footerText',this.value)">
+        <h3 style="margin:20px 0 2px;font-size:16px">★ Features on your page — all changeable</h3>
+        <p style="color:var(--muted);font-size:13px;margin:0">These 5 highlights appear on your page. Edit any title or line, change its icon, add more, or delete one — the preview updates instantly. You can also click a feature card in the preview.</p>
+        <div id="featEditor"></div>
+        <button class="btn outline" style="padding:9px 14px;margin-top:4px" onclick="addFeat()">＋ Add Feature</button>
+        <div class="notice" style="margin-bottom:2px">💡 <b>Tip:</b> You can also click any text, image or button directly in the big preview to edit it there — font, size, colour and style included.</div>
+      </div>
+
+      <div class="tabPane" id="tab-design">
+        <label style="margin-top:2px">✦ Design presets — one-click full restyle</label>
+        <p style="color:var(--muted);font-size:13px;margin:0 0 6px">A preset changes colour, font, background and button shape together. Fine-tune anything afterwards — every setting stays editable.</p>
+        <div class="presetGrid">
+          <button class="presetBtn" onclick="applyPreset('emerald')"><b><span class="dot" style="background:#0A7A5E"></span>Modern Emerald</b><span>Inter • White • Rounded</span></button>
+          <button class="presetBtn" onclick="applyPreset('bold')"><b><span class="dot" style="background:#C2410C"></span>Bold Marketing</b><span>Poppins • Warm • Soft square</span></button>
+          <button class="presetBtn" onclick="applyPreset('ocean')"><b><span class="dot" style="background:#0F4C81"></span>Ocean Tech</b><span>Space Grotesk • White • Soft square</span></button>
+          <button class="presetBtn" onclick="applyPreset('elegant')"><b><span class="dot" style="background:#111111"></span>Elegant Portfolio</b><span>Playfair • Warm • Square</span></button>
+          <button class="presetBtn" onclick="applyPreset('luxury')"><b><span class="dot" style="background:#E8A317"></span>Dark Luxury</b><span>Poppins • Black • Rounded + gold</span></button>
+          <button class="presetBtn" onclick="applyPreset('mint')"><b><span class="dot" style="background:#0E7490"></span>Fresh Mint</b><span>Manrope • Mint • Rounded</span></button>
+        </div>
+        <label>Font style (whole page)</label>
+        <select id="f_font" onchange="upd('font',this.value)">
+          <option value="'Inter',sans-serif">Inter — Clean &amp; Modern</option>
+          <option value="'Poppins',sans-serif">Poppins — Bold Marketing</option>
+          <option value="'Manrope',sans-serif">Manrope — Soft &amp; Friendly</option>
+          <option value="'Playfair Display',serif">Playfair — Elegant / Portfolio</option>
+          <option value="'Space Grotesk',sans-serif">Space Grotesk — Tech</option>
+          <option value="Georgia,serif">Georgia — Classic Serif</option>
+        </select>
+        <label>Theme colour</label><div class="swatchRow" id="swatches"></div>
+        <label>Page background</label>
+        <div class="seg" id="bgSeg">
+          <button data-v="#FFFFFF" onclick="setBg(this)">White</button><button data-v="#FFF8E7" onclick="setBg(this)">Warm</button><button data-v="#0F172A" onclick="setBg(this)">Dark Navy</button><button data-v="#111111" onclick="setBg(this)">Black</button><button data-v="#F0FDF6" onclick="setBg(this)">Mint</button>
+        </div>
+        <label>Base layout</label>
+        <div class="seg" id="layoutSeg"><button data-v="center" onclick="setLayout(this)">Centered</button><button data-v="split" onclick="setLayout(this)">Split (text + image)</button><button data-v="left" onclick="setLayout(this)">Left aligned</button></div>
+        <label>Button shape</label>
+        <div class="seg" id="radiusSeg"><button data-v="999px" onclick="setRadius(this)">Rounded</button><button data-v="12px" onclick="setRadius(this)">Soft Square</button><button data-v="4px" onclick="setRadius(this)">Square</button></div>
+        <label>Show sections</label>
+        <div class="seg">
+          <button id="tgFeatures" onclick="toggleSec('showFeatures')">✓ Features</button>
+          <button id="tgPrice" onclick="toggleSec('showPrice')">✓ Pricing / Offer</button>
+          <button id="tgProof" onclick="toggleSec('showProof')">✓ Testimonial</button>
+        </div>
+
+        <h3 style="margin:22px 0 2px;font-size:17px">📱💻 Separate device design</h3>
+        <p style="color:var(--muted);font-size:13px;margin:0">Desktop and mobile are designed <b>separately</b>. Switch the preview device (top-right of the preview) and adjust each version — visitors automatically see the design made for their device.</p>
+        <div id="devPanels"></div>
+      </div>
+
+      <div class="tabPane" id="tab-blocks">
+        <p style="color:var(--muted);font-size:14px;margin-top:4px">Build your page block by block — this is how a Blank Page is made. Blocks appear below your hero section in order. You can also click a block in the preview to edit it.</p>
+        <div class="row2">
+          <button class="btn outline" onclick="addBlock('heading')">＋ Heading</button>
+          <button class="btn outline" onclick="addBlock('text')">＋ Text</button>
+          <button class="btn outline" onclick="addBlock('button')">＋ Button</button>
+          <button class="btn outline" onclick="addBlock('feature')">＋ Feature Card</button>
+        </div>
+        <div id="blockList"></div>
+        <div id="blockEdit"></div>
+      </div>
+
+      <div class="tabPane" id="tab-ads">
+        <p style="color:var(--muted);font-size:14px;margin-top:4px">Not just Adsterra — paste ad codes from <b>any network</b>: Adsterra, Google AdSense, PropellerAds, Monetag or any other. Pick the network for each slot, paste its code, and the ad runs in that slot on your hosted page. In the preview you see exactly where each slot sits.</p>
+        <div id="adSlots"></div>
+        <div class="seg"><button id="adPreviewBtn" class="active" onclick="toggleAdPreview()">Ad placeholders: ON</button></div>
+      </div>
+
+      <div class="tabPane" id="tab-publish">
+        <h3 style="margin-top:4px">Publish &amp; host on PageCraft</h3>
+        <p style="color:var(--muted);font-size:14px">Your page is hosted <b>on this PageCraft domain</b> — no separate hosting, no file upload. Templates are never downloaded; your finished page goes live here instead.</p>
+        <label>Your page address (on this domain)</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-weight:700;color:var(--muted)">/p/</span>
+          <input type="text" id="f_slug" placeholder="my-page-name" oninput="onSlugInput(this.value)">
+        </div>
+        <div class="publishCard" style="margin-top:14px">
+          <div class="livePath" id="publishPath">/p/my-page</div>
+          <p style="color:var(--muted);font-size:13px;margin:8px 0">Visitors on a phone see your mobile design; visitors on a computer see your desktop design — automatically, from this one address.</p>
+          <button class="btn" style="width:100%;margin:6px 0" id="publishBtn" onclick="publishPage()">🚀 Publish — Host on This Domain</button>
+          <button class="btn dark" style="width:100%;margin:6px 0" onclick="viewLiveCurrent()">👁 View Live Page</button>
+          <div id="publishStatus"></div>
+        </div>
+        <div id="hostedListBuilder"></div>
+        <div class="notice">🔒 <b>Hosted only:</b> PageCraft templates and pages can't be downloaded as files — publishing here is how a page goes live, on the same domain as this site.</div>
+      </div>
+
+      <div class="tabPane" id="tab-deploy">
+        <h3 style="margin-top:4px">Host PageCraft on GitHub + Vercel</h3>
+        <p style="color:var(--muted);font-size:14px">Setup for the site owner: this whole site is one static <b>index.html</b> (+ optional <b>assets/</b> folder), so it deploys on Vercel with <b>no build command</b>.</p>
+        <label>Step 1 — Create the GitHub repo</label>
+        <p style="color:var(--muted);font-size:13.5px;margin:0">github.com → New repository → name it <b>pagecraft</b> → Create. Then push:</p>
+        <div class="codeBox">git init
+git add index.html vercel.json
+git commit -m "PageCraft — first deploy"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/pagecraft.git
+git push -u origin main</div>
+        <button class="btn outline" style="padding:9px 14px" onclick="copyText(this.previousElementSibling.textContent,'Git commands copied')">Copy git commands</button>
+        <label>Step 2 — Add vercel.json (repo root)</label>
+        <div class="codeBox" id="vercelJsonBuilder">{
+  "cleanUrls": true,
+  "trailingSlash": false
+}</div>
+        <button class="btn outline" style="padding:9px 14px" onclick="copyText(document.getElementById('vercelJsonBuilder').textContent,'vercel.json copied')">Copy vercel.json</button>
+        <label>Step 3 — Import in Vercel</label>
+        <p style="color:var(--muted);font-size:13.5px;margin:0">vercel.com → Add New → Project → Import the <b>pagecraft</b> repo → Framework: <b>Other</b> → Build Command: <b>empty</b> → Output Directory: <b>empty (root)</b> → <b>Deploy</b>. Done — live at <b>pagecraft.vercel.app</b>, and every GitHub push auto-redeploys.</p>
+        <label>Step 4 — Custom domain (optional)</label>
+        <p style="color:var(--muted);font-size:13.5px;margin:0">Vercel project → Settings → Domains → add your domain and follow the DNS hint Vercel shows.</p>
+        <div class="notice">Your customised page design, features and ad codes live in this builder. Publish (previous tab) hosts the page on this domain; the GitHub + Vercel steps above host the PageCraft site itself.</div>
+      </div>
+    </div>
+
+    <div class="previewWrap">
+      <div class="inlineBar" id="inlineBar" style="display:none">
+        <h4 id="inlineTitle">Edit</h4>
+        <p class="hint">Editing directly from the preview — changes apply instantly to your page.</p>
+        <div id="inlineFields"></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn" style="padding:9px 16px" onclick="closeInline()">✓ Done</button>
+          <button class="btn outline" style="padding:9px 16px" onclick="closeInline()">Close</button>
+        </div>
+      </div>
+      <div class="previewBar">
+        <b style="font-size:13px">● LIVE PREVIEW</b>
+        <span class="urlPill" id="urlPill">/p/my-page</span>
+        <div class="seg"><button id="inlineToggle" class="active" onclick="toggleInlineMode()">✏️ Click-to-Edit: ON</button></div>
+        <div class="deviceBtns"><button class="active" id="devDesktop" onclick="setDevice('desktop')">💻 Desktop</button><button id="devMobile" onclick="setDevice('mobile')">📱 Mobile</button></div>
+      </div>
+      <div class="phoneFrame desktop" id="phoneFrame"><div class="notch"></div><div id="livePreview"></div></div>
+      <p style="color:var(--muted);font-size:13px;text-align:center">Designing for: <b id="designingFor">Desktop</b> — switch device above to design the other version. Click anything in the preview to edit it in place.</p>
+    </div>
+  </div>
+</main>
+
+<!-- LIVE HOSTED VIEW -->
+<main id="liveView" class="liveView">
+  <div class="liveBar">
+    <button onclick="backFromLive()">← Back to Builder</button>
+    <span class="path" id="livePathLabel">/p/my-page</span>
+    <span style="font-size:13px" id="liveDeviceLabel">💻 Desktop design</span>
+  </div>
+  <div id="liveCanvas"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CATEGORIES=["All","Adsterra Marketing","Portfolio","Job & Career","E-commerce","Business","Others"];
+var activeCat="All";
+var TEMPLATES=[
+ {id:"adsterra-pro",name:"Adsterra Money Page",cat:"Adsterra Marketing",plan:"Free",desc:"High-CTR marketing page with banner slot under the headline, native ads and a strong claim CTA.",color:"#0A7A5E",headline:"Earn From Your Traffic — Monetize Every Click",sub:"A proven landing layout built for ad networks: banner at the top, native ads in the content and one clear call-to-action.",cta:"Start Earning Now",badge:"ADSTERRA • MARKETING"},
+ {id:"adsterra-content",name:"Content + Ads Blog Page",cat:"Adsterra Marketing",plan:"Pro",desc:"Article-style page for content sites — social bar ready, native banner inside the article, clean reading layout.",color:"#B45309",headline:"Read, Discover & Explore More",sub:"Content-first page designed to keep visitors reading while your native and social bar ads do the earning.",cta:"Read Full Article",badge:"CONTENT • ADS READY"},
+ {id:"portfolio-creative",name:"Creative Portfolio",cat:"Portfolio",plan:"Free",desc:"Elegant portfolio for designers, photographers and freelancers with a big hero image and project highlights.",color:"#7C3AED",headline:"Hi, I'm Alex — I Design Brands People Remember",sub:"Portfolio of selected work in branding, social media and web design. Available for freelance projects worldwide.",cta:"Hire Me",badge:"PORTFOLIO • DESIGNER"},
+ {id:"portfolio-dev",name:"Developer Portfolio",cat:"Portfolio",plan:"Free",desc:"Clean tech portfolio for web developers — skills, projects and a direct contact CTA.",color:"#0F4C81",headline:"Full-Stack Developer Building Fast Websites",sub:"I build responsive websites and landing pages with clean code. 3+ years of experience, 40+ projects delivered.",cta:"View My Work",badge:"PORTFOLIO • DEVELOPER"},
+ {id:"job-apply",name:"Job / Hiring Landing",cat:"Job & Career",plan:"Free",desc:"Recruitment page with role highlights, requirements-style features and a bold Apply Now button.",color:"#0E7490",headline:"We're Hiring — Join Our Growing Team",sub:"Open roles in marketing, design and support. Remote-friendly, weekly pay discussions and fast application — apply in 2 minutes.",cta:"Apply Now",badge:"CAREERS • HIRING"},
+ {id:"job-cv",name:"Resume / CV Page",cat:"Job & Career",plan:"Pro",desc:"Personal CV landing page to share with employers — experience highlights and a contact CTA.",color:"#334155",headline:"Marketing Executive — 5 Years of Results",sub:"A one-page professional profile: experience, skills and achievements in one link you can send to any employer.",cta:"Contact Me",badge:"CV • PERSONAL BRAND"},
+ {id:"shop-product",name:"E-commerce Product Page",cat:"E-commerce",plan:"Free",desc:"Single-product sales page with price section, benefits and an order CTA — great for cash-on-delivery offers.",color:"#C2410C",headline:"Premium Wireless Earbuds — 40% Off Today",sub:"Crystal-clear sound, 30-hour battery and fast home delivery. Order now and pay when your product arrives.",cta:"Order Now — Cash on Delivery",badge:"SHOP • BEST SELLER"},
+ {id:"business-agency",name:"Business / Agency",cat:"Business",plan:"Free",desc:"Professional service page for agencies and local businesses — services, trust proof and a booking CTA.",color:"#14532D",headline:"We Grow Local Businesses With Smart Marketing",sub:"Social media, ads and landing pages for businesses that want more customers — book a free consultation today.",cta:"Book Free Consultation",badge:"AGENCY • SERVICES"},
+ {id:"event-launch",name:"Event / Launch Page",cat:"Others",plan:"Pro",desc:"Countdown-style launch page for webinars, courses, apps and product launches.",color:"#9D174D",headline:"Something Big Is Launching Soon",sub:"Join the waitlist and be the first to know. Early members get an exclusive launch bonus.",cta:"Join the Waitlist",badge:"LAUNCH • COMING SOON"}
+];
+var COLORS=["#0A7A5E","#2563EB","#7C3AED","#C2410C","#0F4C81","#B45309","#9D174D","#111111","#0E7490","#14532D"];
+var FONTS=[["'Inter',sans-serif","Inter — Clean & Modern"],["'Poppins',sans-serif","Poppins — Bold Marketing"],["'Manrope',sans-serif","Manrope — Soft & Friendly"],["'Playfair Display',serif","Playfair — Elegant"],["'Space Grotesk',sans-serif","Space Grotesk — Tech"],["Georgia,serif","Georgia — Classic Serif"]];
+var AD_NETWORKS=["Adsterra","Google AdSense","PropellerAds","Monetag","Other Network"];
+var AD_SLOTS=[
+ {key:"pop",label:"Popunder / Pop",desc:"Loads with the page — paste the full script from your network."},
+ {key:"topbanner",label:"Top Banner — 728×90 / 320×50",desc:"Shown right under the hero section."},
+ {key:"incontent",label:"In-Content Banner",desc:"Shown after the features section, inside the content flow."},
+ {key:"native",label:"Native Ads",desc:"Shown below your content blocks, blended with the page."},
+ {key:"social",label:"Social Bar / Floating Bar",desc:"Floating bar supplied by your network."},
+ {key:"sticky",label:"Sticky Footer Banner",desc:"Stays fixed at the bottom of the hosted page."}
+];
+var state=null;
+var previewDevice="desktop";
+var inlineMode=true;
+var selInline=null;
+var hosted=[];
+var liveSnapshot=null, liveSlug="";
+
+function defaultAds(){var o={};AD_SLOTS.forEach(function(s){o[s.key]={network:"Adsterra",code:""};});return o;}
+function defaultDev(){return{
+ desktop:{layout:"inherit",hSize:44,spacing:"normal",hideImage:false,featCols:3,ctaFull:false},
+ mobile:{layout:"center",hSize:30,spacing:"compact",hideImage:false,featCols:1,ctaFull:true}
+};}
+function defaultEl(){return{
+ headline:{font:"",size:0,color:"",bold:true,align:""},
+ sub:{font:"",size:0,color:""},
+ badge:{color:"",bg:""},
+ cta:{font:"",size:0,bg:"",color:"",radius:"",shadow:true}
+};}
+function blankState(){return{templateId:"blank",templateName:"Blank Page",plan:"Free",pageTitle:"My Landing Page",badge:"MY PAGE",headline:"Write your headline here",sub:"Add a short description that tells visitors exactly what this page offers and why they should stay.",ctaText:"Get Started",ctaUrl:"#",image:"",imageAlt:"Page image",footerText:"",font:"'Inter',sans-serif",color:"#0A7A5E",bg:"#FFFFFF",layout:"center",radius:"999px",imgRadius:16,showFeatures:true,showPrice:false,showProof:false,
+ featCards:[{t:"Fast Setup",x:"Live in minutes, no coding needed.",icon:"⚡"},{t:"Mobile First",x:"Perfect on every screen size.",icon:"▣"},{t:"Clear CTA",x:"One goal, one action, more results.",icon:"◎"},{t:"Fast & Easy",x:"Everything on this page is set up and ready — customise the text and make it yours.",icon:"✓"},{t:"Mobile Friendly",x:"Looks perfect on phone, tablet and desktop, so no visitor is ever lost.",icon:"✓"}],
+ price:{amount:"৳ 999",old:"৳ 1,800",note:"Limited-time price — order before the offer ends."},
+ proof:{quote:"“This page made everything so easy — I got results within the first week. Highly recommended!”",author:"— Happy Customer, Verified User ★★★★★"},
+ blocks:[],ads:defaultAds(),showAds:true,dev:defaultDev(),el:defaultEl(),publishedSlug:""};}
+function templateState(t){var s=blankState();s.templateId=t.id;s.templateName=t.name;s.plan=t.plan;s.pageTitle=t.name;s.badge=t.badge;s.headline=t.headline;s.sub=t.sub;s.ctaText=t.cta;s.color=t.color;s.showPrice=(t.cat==="E-commerce");s.showProof=true;s.blocks=[{type:"text",title:"",text:"Use the Blocks tab to add more headings, text, buttons and feature cards anywhere below the hero section. The 5 feature highlights above are all editable too — Content tab → Features, or click a card in the preview."}];return s;}
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function slugify(s){return (s||"my-page").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"my-page";}
+
+function renderPills(){document.getElementById("catPills").innerHTML=CATEGORIES.map(function(c){return '<button class="pill '+(c===activeCat?"active":"")+'" onclick="setCat(\''+c+'\')">'+c+'</button>';}).join("");}
+function setCat(c){activeCat=c;renderPills();renderGallery();}
+function renderGallery(){
+ var q=(document.getElementById("searchInput").value||"").toLowerCase();
+ var list=TEMPLATES.filter(function(t){return (activeCat==="All"||t.cat===activeCat) && (t.name+" "+t.cat+" "+t.desc).toLowerCase().indexOf(q)>-1;});
+ var html=list.map(function(t){
+  return '<article class="card"><div class="mock" style="background:linear-gradient(135deg,'+t.color+', '+t.color+'CC)"><div class="bar" style="width:38%"></div><div class="title"></div><div class="line"></div><div class="line" style="width:64%"></div><span class="cta"> '+esc(t.cta)+' </span><span class="badge '+(t.plan==="Free"?"free":"pro")+'">'+t.plan.toUpperCase()+'</span></div><div class="cardBody"><h3>'+esc(t.name)+'</h3><p>'+esc(t.desc)+'</p><div class="meta"><span class="cat">'+esc(t.cat)+'</span><span class="hostChip">🔒 Hosted only</span><button class="btn" style="padding:9px 14px" onclick="openBuilder(\''+t.id+'\')">Use Template →</button></div></div></article>';
+ }).join("");
+ html+='<article class="card blankCard"><div style="font-size:34px">📄</div><h3>Blank Page</h3><p>No template. No limits. Start with an empty canvas and build your landing page block by block — your text, your image, your style.</p><button class="btn dark" onclick="openBuilder(\'blank\')">Start Blank Page →</button></article>';
+ document.getElementById("templateGrid").innerHTML=html || '<p style="color:var(--muted)">No templates match your search.</p>'+html;
+}
+function showHome(){document.getElementById("liveView").classList.remove("show");document.getElementById("builderView").classList.remove("show");document.getElementById("homeView").style.display="block";renderHosted();window.scrollTo({top:0,behavior:"smooth"});}
+function gotoMyPages(){showHome();if(hosted.length){document.getElementById("myPages").scrollIntoView({behavior:"smooth"});}else{toast("No hosted pages yet — create a page and publish it");}}
+function openBuilder(id){
+ if(id==="blank"){state=blankState();}else if(typeof id==="object"){state=clone(id);}else{var t=TEMPLATES.filter(function(x){return x.id===id;})[0];state=templateState(t);}
+ document.getElementById("liveView").classList.remove("show");
+ document.getElementById("homeView").style.display="none";document.getElementById("builderView").classList.add("show");
+ document.getElementById("builderTitle").textContent=state.templateName+" Builder";
+ document.getElementById("builderSub").textContent=state.plan+" template • Desktop + mobile designed separately • Click the preview to edit in place.";
+ document.getElementById("f_slug").value=state.publishedSlug||"";
+ closeInline();syncForm();renderSwatches();renderDevPanels();renderAdSlots();renderBlocks();setDevice(previewDevice);updatePublishUI();window.scrollTo({top:0});
+ toast(state.templateId==="blank"?"Blank page ready — add blocks, or click the preview to edit":"Template loaded — start customising");
+}
+function syncForm(){
+ ["pageTitle","badge","headline","sub","ctaText","ctaUrl","image","imageAlt","footerText"].forEach(function(k){var el=document.getElementById("f_"+k);if(el)el.value=state[k]||"";});
+ document.getElementById("f_font").value=state.font;
+ markSeg("bgSeg",state.bg);markSeg("layoutSeg",state.layout);markSeg("radiusSeg",state.radius);
+ document.getElementById("tgFeatures").textContent=(state.showFeatures?"✓ ":"＋ ")+"Features";
+ document.getElementById("tgPrice").textContent=(state.showPrice?"✓ ":"＋ ")+"Pricing / Offer";
+ document.getElementById("tgProof").textContent=(state.showProof?"✓ ":"＋ ")+"Testimonial";
+ renderFeatEditor();
+}
+function markSeg(id,val){document.querySelectorAll("#"+id+" button").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-v")===val);});}
+function switchTab(name){document.querySelectorAll(".tabs button").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});document.querySelectorAll(".tabPane").forEach(function(p){p.classList.toggle("active",p.id==="tab-"+name);});if(name==="publish")updatePublishUI();if(window.innerWidth<=900&&name!=="content"){document.querySelector(".panel").scrollIntoView({behavior:"smooth"});}}
+function upd(k,v){state[k]=v;renderPreview();updatePublishUI();}
+function onUpload(input){if(!input.files||!input.files[0])return;var r=new FileReader();r.onload=function(e){state.image=e.target.result;document.getElementById("f_image").value="";renderPreview();toast("Image added to preview");};r.readAsDataURL(input.files[0]);}
+function renderSwatches(){document.getElementById("swatches").innerHTML=COLORS.map(function(c){return '<button class="swatch '+(c===state.color?"sel":"")+'" style="background:'+c+'" onclick="setColor(\''+c+'\')" aria-label="Colour '+c+'"></button>';}).join("");}
+function setColor(c){state.color=c;renderSwatches();renderPreview();}
+function setBg(b){state.bg=b.getAttribute("data-v");markSeg("bgSeg",state.bg);renderPreview();}
+function setLayout(b){state.layout=b.getAttribute("data-v");markSeg("layoutSeg",state.layout);renderPreview();}
+function setRadius(b){state.radius=b.getAttribute("data-v");markSeg("radiusSeg",state.radius);renderPreview();}
+function toggleSec(k){state[k]=!state[k];syncForm();renderPreview();}
+/* ---- Features editor (all 5 highlights are changeable) ---- */
+function renderFeatEditor(){
+ var box=document.getElementById("featEditor");if(!box||!state)return;
+ if(!state.featCards.length){box.innerHTML='<p style="color:var(--muted);font-size:13.5px">No features yet — add one below.</p>';return;}
+ box.innerHTML=state.featCards.map(function(f,i){
+  return '<div class="featEditorItem"><div style="display:flex;gap:8px;align-items:center"><input type="text" maxlength="4" style="width:58px;text-align:center" value="'+esc(f.icon||"⚡")+'" oninput="featUpd('+i+',\'icon\',this.value)" aria-label="Feature icon"><input type="text" value="'+esc(f.t)+'" oninput="featUpd('+i+',\'t\',this.value)" aria-label="Feature title"><button class="iconBtn" title="Duplicate" onclick="dupFeat('+i+')">⧉</button><button class="iconBtn" title="Delete" onclick="delFeat('+i+')">✕</button></div><input type="text" value="'+esc(f.x)+'" oninput="featUpd('+i+',\'x\',this.value)" aria-label="Feature text"></div>';
+ }).join("");
+}
+function featUpd(i,k,v){state.featCards[i][k]=v;renderPreview();}
+function addFeat(){state.featCards.push({t:"New Feature",x:"Write the benefit in one short line.",icon:"✦"});renderFeatEditor();renderPreview();toast("Feature added — edit it in Content or in the preview");}
+function delFeat(i){state.featCards.splice(i,1);renderFeatEditor();renderPreview();toast("Feature removed");}
+function dupFeat(i){state.featCards.splice(i+1,0,clone(state.featCards[i]));renderFeatEditor();renderPreview();toast("Feature duplicated");}
+function inlineFeatSync(){renderFeatEditor();}
+/* ---- Design presets ---- */
+var PRESETS={
+ emerald:{color:"#0A7A5E",font:"'Inter',sans-serif",bg:"#FFFFFF",radius:"999px"},
+ bold:{color:"#C2410C",font:"'Poppins',sans-serif",bg:"#FFF8E7",radius:"12px"},
+ ocean:{color:"#0F4C81",font:"'Space Grotesk',sans-serif",bg:"#FFFFFF",radius:"12px"},
+ elegant:{color:"#111111",font:"'Playfair Display',serif",bg:"#FFF8E7",radius:"4px"},
+ luxury:{color:"#E8A317",font:"'Poppins',sans-serif",bg:"#111111",radius:"999px"},
+ mint:{color:"#0E7490",font:"'Manrope',sans-serif",bg:"#F0FDF6",radius:"999px"}
+};
+function applyPreset(name){var p=PRESETS[name];if(!p)return;state.color=p.color;state.font=p.font;state.bg=p.bg;state.radius=p.radius;state.el.cta.bg="";syncForm();renderSwatches();renderPreview();toast("Preset applied — fine-tune colour, font and shape below");}
+function copyText(txt,label){
+ var done=function(){toast(label||"Copied");};
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(function(){fallbackCopy(txt);done();});}else{fallbackCopy(txt);done();}
+}
+function fallbackCopy(txt){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);}
+
+/* ---- Separate device design ---- */
+function setDevice(d){previewDevice=d;document.getElementById("phoneFrame").className="phoneFrame "+d;document.getElementById("devDesktop").classList.toggle("active",d==="desktop");document.getElementById("devMobile").classList.toggle("active",d==="mobile");document.getElementById("designingFor").textContent=(d==="desktop"?"Desktop":"Mobile");renderPreview();markDevPanelActive();}
+function devPanelHTML(dev){
+ var d=state.dev[dev];var isM=(dev==="mobile");
+ var layoutBtns=[["inherit","Use base layout"],["center","Centered"],["split","Split"],["left","Left aligned"]].map(function(o){return '<button data-dev="'+dev+'" data-k="layout" data-v="'+o[0]+'" class="'+(d.layout===o[0]?"active":"")+'" onclick="devSet(this)">'+o[1]+'</button>';}).join("");
+ var colBtns=[1,2,3].map(function(n){return '<button data-dev="'+dev+'" data-k="featCols" data-v="'+n+'" class="'+(d.featCols===n?"active":"")+'" onclick="devSet(this)">'+n+' column'+(n>1?"s":"")+'</button>';}).join("");
+ var spBtns=[["compact","Compact"],["normal","Normal"],["roomy","Roomy"]].map(function(o){return '<button data-dev="'+dev+'" data-k="spacing" data-v="'+o[0]+'" class="'+(d.spacing===o[0]?"active":"")+'" onclick="devSet(this)">'+o[1]+'</button>';}).join("");
+ return '<div class="devBox" id="devBox-'+dev+'"><h4>'+(isM?"📱 Mobile design":"💻 Desktop design")+'</h4><p class="hint">'+(isM?"What phone visitors see.":"What computer visitors see.")+'</p>'
+ +'<label>Layout on '+(isM?"mobile":"desktop")+'</label><div class="seg">'+layoutBtns+'</div>'
+ +'<label>Headline size — <span id="hsVal-'+dev+'">'+d.hSize+'px</span></label><input type="range" min="22" max="64" value="'+d.hSize+'" oninput="devSize(\''+dev+'\',this.value)">'
+ +'<label>Spacing</label><div class="seg">'+spBtns+'</div>'
+ +'<label>Feature cards per row</label><div class="seg">'+colBtns+'</div>'
+ +'<label>Options</label><div class="seg"><button data-dev="'+dev+'" data-k="hideImage" class="'+(d.hideImage?"active":"")+'" onclick="devToggle(this)">'+(d.hideImage?"Image: Hidden":"Image: Shown")+'</button><button data-dev="'+dev+'" data-k="ctaFull" class="'+(d.ctaFull?"active":"")+'" onclick="devToggle(this)">'+(d.ctaFull?"Button: Full width":"Button: Auto width")+'</button></div></div>';
+}
+function renderDevPanels(){if(!state)return;document.getElementById("devPanels").innerHTML=devPanelHTML("desktop")+devPanelHTML("mobile");markDevPanelActive();}
+function markDevPanelActive(){["desktop","mobile"].forEach(function(dev){var b=document.getElementById("devBox-"+dev);if(b)b.style.borderColor=(dev===previewDevice)?"var(--accent)":"";});}
+function devSet(btn){var dev=btn.getAttribute("data-dev"),k=btn.getAttribute("data-k"),v=btn.getAttribute("data-v");state.dev[dev][k]=(k==="featCols")?parseInt(v,10):v;renderDevPanels();renderPreview();}
+function devSize(dev,v){state.dev[dev].hSize=parseInt(v,10);var el=document.getElementById("hsVal-"+dev);if(el)el.textContent=v+"px";renderPreview();}
+function devToggle(btn){var dev=btn.getAttribute("data-dev"),k=btn.getAttribute("data-k");state.dev[dev][k]=!state.dev[dev][k];renderDevPanels();renderPreview();}
+
+/* ---- Blocks ---- */
+function addBlock(type){var b={type:type,title:type==="heading"?"New Heading":type==="feature"?"New Feature":"",text:type==="text"?"Write your paragraph here.":type==="button"?"":"Describe this in one short line.",label:type==="button"?"Click Here":"",url:"#"};state.blocks.push(b);renderBlocks();renderPreview();toast("Block added — click it in the preview to edit");}
+function renderBlocks(){
+ var list=document.getElementById("blockList");
+ if(!state.blocks.length){list.innerHTML='<p style="color:var(--muted);font-size:13.5px">No blocks yet. Add your first block above.</p>';document.getElementById("blockEdit").innerHTML="";return;}
+ list.innerHTML=state.blocks.map(function(b,i){return '<div class="blockItem"><div><b>'+(i+1)+'. '+b.type.toUpperCase()+'</b><span>'+esc(b.title||b.label||b.text||"")+'</span></div><div style="display:flex;gap:5px"><button class="iconBtn" onclick="moveBlock('+i+',-1)">↑</button><button class="iconBtn" onclick="moveBlock('+i+',1)">↓</button><button class="iconBtn" onclick="editBlock('+i+')">✎</button><button class="iconBtn" onclick="delBlock('+i+')">✕</button></div></div>';}).join("");
+}
+var editIdx=-1;
+function editBlock(i){editIdx=i;var b=state.blocks[i];document.getElementById("blockEdit").innerHTML='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:4px"><label>Editing block '+(i+1)+' — '+b.type+'</label>'+(b.type!=="text"?'<label>Title / Label</label><input type="text" value="'+esc(b.title||b.label||"")+'" oninput="blockUpd(\'title\',this.value)">':'')+'<label>Text</label><textarea oninput="blockUpd(\'text\',this.value)">'+esc(b.text||"")+'</textarea>'+(b.type==="button"?'<label>Button link</label><input type="url" value="'+esc(b.url||"#")+'" oninput="blockUpd(\'url\',this.value)">':'')+'</div>';}
+function blockUpd(k,v){if(editIdx<0)return;var b=state.blocks[editIdx];if(k==="title"){b.title=v;b.label=v;}else{b[k]=v;}renderBlocks();renderPreview();}
+function delBlock(i){state.blocks.splice(i,1);editIdx=-1;document.getElementById("blockEdit").innerHTML="";renderBlocks();renderPreview();}
+function moveBlock(i,d){var j=i+d;if(j<0||j>=state.blocks.length)return;var t=state.blocks[i];state.blocks[i]=state.blocks[j];state.blocks[j]=t;renderBlocks();renderPreview();}
+
+/* ---- Ad slots (all networks) ---- */
+function renderAdSlots(){
+ document.getElementById("adSlots").innerHTML=AD_SLOTS.map(function(s){
+  var a=state.ads[s.key];var has=a.code.trim();
+  var netOpts=AD_NETWORKS.map(function(n){return '<option value="'+n+'"'+(a.network===n?" selected":"")+'>'+n+'</option>';}).join("");
+  return '<div class="adBox"><h4>'+s.label+' <span class="status'+(has?" on":"")+'" id="st-'+s.key+'">'+(has?a.network+" code added ✓":"Not added")+'</span></h4><p>'+s.desc+'</p><label style="margin-top:6px">Ad network</label><select onchange="updAdNetwork(\''+s.key+'\',this.value)">'+netOpts+'</select><textarea class="code" placeholder="Paste the ad code from your network dashboard…" oninput="updAd(\''+s.key+'\',this.value)">'+esc(a.code)+'</textarea></div>';
+ }).join("");
+}
+function updAdNetwork(k,v){state.ads[k].network=v;renderPreview();}
+function updAd(k,v){state.ads[k]=state.ads[k]||{network:"Adsterra",code:""};state.ads[k].code=v;var el=document.getElementById("st-"+k);if(el){el.textContent=v.trim()?(state.ads[k].network+" code added ✓"):"Not added";el.classList.toggle("on",!!v.trim());}renderPreview();}
+function toggleAdPreview(){state.showAds=!state.showAds;document.getElementById("adPreviewBtn").textContent="Ad placeholders: "+(state.showAds?"ON":"OFF");document.getElementById("adPreviewBtn").classList.toggle("active",state.showAds);renderPreview();}
+</script>
+
+<script>
+/* ---- Preview rendering (per-device) ---- */
+function adSlotHTML(s,slot,live){
+ var a=s.ads[slot.key];var has=a&&a.code.trim();
+ if(live){return has?'<div class="liveAd" data-livead="'+slot.key+'" style="margin:12px auto;text-align:center"></div>':"";}
+ if(!s.showAds)return "";
+ return '<div data-inline="ad" data-slot="'+slot.key+'" style="border:2px dashed '+(has?"#0A7A5E":"#CBD5CB")+';background:'+(has?"#ECFDF5":"#F8FAFC")+';color:#475569;border-radius:10px;padding:13px;text-align:center;font-size:12.5px;font-weight:600;margin:14px 0">📢 '+esc(has?a.network+" • ":"")+slot.label.toUpperCase()+'<br><span style="font-weight:400">'+(has?"Ad code added — it runs in this slot on your hosted page":"No code yet — click here or use the Ads tab")+'</span></div>';
+}
+function slotByKey(k){return AD_SLOTS.filter(function(s){return s.key===k;})[0];}
+function previewHTMLFor(s,devName,live){
+ var d=s.dev[devName];
+ var effLayout=(d.layout&&d.layout!=="inherit")?d.layout:s.layout;
+ var dark=(s.bg==="#111111"||s.bg==="#0F172A");var txt=dark?"#F8FAFC":"#111827";var sub=dark?"#CBD5E1":"#4B5563";
+ var line=dark?"#334155":"#E5E7EB";
+ var el=s.el;
+ var pad=d.spacing==="compact"?"22px 16px 26px":d.spacing==="roomy"?"44px 30px 52px":"32px 22px 38px";
+ var secGap=d.spacing==="compact"?16:26;
+ var center=(effLayout==="center");
+ var hAlign=el.headline.align||(center?"center":"left");
+ var hStyle='font-family:'+(el.headline.font||s.font)+';font-size:'+(el.headline.size||d.hSize)+'px;line-height:1.08;margin:14px 0 10px;letter-spacing:-.02em;font-weight:'+(el.headline.bold?800:600)+';color:'+(el.headline.color||txt)+';text-align:'+hAlign;
+ var subStyle='font-family:'+(el.sub.font||s.font)+';color:'+(el.sub.color||sub)+';font-size:'+(el.sub.size||(devName==="mobile"?15:16.5))+'px;margin:0 0 20px';
+ var badgeStyle='display:inline-block;background:'+(el.badge.bg||(s.color+"1A"))+';color:'+(el.badge.color||s.color)+';border:1px solid '+s.color+'55;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.05em';
+ var ctaBg=el.cta.bg||s.color, ctaColor=el.cta.color||"#ffffff", ctaRadius=el.cta.radius||s.radius;
+ var ctaStyle='display:'+(d.ctaFull?"block":"inline-block")+';text-align:center;background:'+ctaBg+';color:'+ctaColor+';padding:14px 26px;border-radius:'+ctaRadius+';font-weight:800;text-decoration:none;font-family:'+(el.cta.font||s.font)+';font-size:'+(el.cta.size||16)+'px'+(el.cta.shadow?';box-shadow:0 10px 24px '+ctaBg+'55':"");
+ var heroInner='<div style="max-width:640px;'+(center?"margin:0 auto;text-align:center":"")+'">'
+  +(s.badge?'<div data-inline="badge" style="'+badgeStyle+'">'+esc(s.badge)+'</div>':"")
+  +'<h1 data-inline="headline" style="'+hStyle+'">'+esc(s.headline)+'</h1>'
+  +'<p data-inline="sub" style="'+subStyle+'">'+esc(s.sub)+'</p>'
+  +'<a data-inline="cta" href="'+esc(s.ctaUrl||"#")+'" style="'+ctaStyle+'">'+esc(s.ctaText)+' →</a></div>';
+ var imgHtml="";
+ if(!d.hideImage){
+   imgHtml=s.image?'<img data-inline="image" src="'+s.image+'" alt="'+esc(s.imageAlt)+'" style="width:100%;border-radius:'+s.imgRadius+'px;margin-top:22px;object-fit:cover;max-height:340px;cursor:pointer">'
+     :'<div data-inline="image" style="background:'+s.color+'22;border:1.5px dashed '+s.color+';border-radius:'+s.imgRadius+'px;min-height:200px;display:flex;align-items:center;justify-content:center;color:'+s.color+';font-weight:700;padding:16px;text-align:center;margin-top:22px;cursor:pointer">🖼 Click to add a hero image</div>';
+   if(effLayout!=="split"){/* image below text already */}
+ }
+ var hero;
+ if(effLayout==="split"){hero='<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center"><div>'+heroInner.replace('data-inline="cta"','data-inline="cta"')+'</div><div>'+(d.hideImage?"":imgHtml)+'</div></div>'; if(d.hideImage)hero='<div>'+heroInner+'</div>';}
+ else{hero=heroInner+imgHtml;}
+ var blocks=s.blocks.map(function(b,i){
+   if(b.type==="heading")return '<h2 data-inline="block" data-idx="'+i+'" style="font-size:26px;margin:'+secGap+'px 0 6px">'+esc(b.title)+'</h2>';
+   if(b.type==="text")return '<p data-inline="block" data-idx="'+i+'" style="color:'+sub+';font-size:15.5px;max-width:680px">'+esc(b.text)+'</p>';
+   if(b.type==="button")return '<div data-inline="block" data-idx="'+i+'" style="margin:14px 0"><a href="'+esc(b.url||"#")+'" style="display:inline-block;background:'+s.color+';color:#fff;padding:12px 22px;border-radius:'+s.radius+';font-weight:700;text-decoration:none;pointer-events:none">'+esc(b.label||b.title||"Click Here")+'</a></div>';
+   if(b.type==="feature")return '<div data-inline="block" data-idx="'+i+'" style="border:1px solid '+line+';border-radius:14px;padding:16px;margin:10px 0"><b style="font-size:16px">✓ '+esc(b.title)+'</b><p style="color:'+sub+';margin:4px 0 0;font-size:14.5px">'+esc(b.text)+'</p></div>';
+   return "";}).join("");
+ var feat=s.showFeatures?'<div style="display:grid;grid-template-columns:repeat('+d.featCols+',1fr);gap:12px;margin-top:'+secGap+'px">'+s.featCards.map(function(f,i){return '<div data-inline="feat" data-idx="'+i+'" style="border:1px solid '+line+';border-radius:14px;padding:16px;background:'+(dark?"rgba(255,255,255,.04)":"#FFFFFF")+'"><div style="width:36px;height:36px;border-radius:10px;background:'+s.color+'1F;color:'+s.color+';display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;margin-bottom:9px">'+esc(f.icon||"⚡")+'</div><b style="font-size:15.5px">'+esc(f.t)+'</b><p style="color:'+sub+';font-size:14px;margin:4px 0 0;line-height:1.45">'+esc(f.x)+'</p></div>';}).join("")+'</div>':"";
+ var price=s.showPrice?'<div data-inline="price" style="background:'+s.color+';color:#fff;border-radius:16px;padding:22px;margin-top:'+secGap+'px;text-align:center"><div style="font-size:13px;font-weight:800;letter-spacing:.06em">SPECIAL OFFER</div><div style="font-size:36px;font-weight:800;margin:4px 0">'+esc(s.price.amount)+' <span style="font-size:16px;text-decoration:line-through;opacity:.7">'+esc(s.price.old)+'</span></div><p style="opacity:.9;margin:0 0 14px">'+esc(s.price.note)+'</p><a href="'+esc(s.ctaUrl||"#")+'" style="background:#fff;color:'+s.color+';padding:12px 22px;border-radius:'+s.radius+';font-weight:800;text-decoration:none;display:inline-block;pointer-events:none">'+esc(s.ctaText)+'</a></div>':"";
+ var proof=s.showProof?'<figure data-inline="proof" style="margin:'+secGap+'px 0 0;background:'+(dark?"#1E293B":"#F8FAFC")+';border-radius:14px;padding:18px"><blockquote style="margin:0;font-size:16px">'+esc(s.proof.quote)+'</blockquote><figcaption style="color:'+sub+';font-size:13.5px;margin-top:8px">'+esc(s.proof.author)+'</figcaption></figure>':"";
+ var popNote="";
+ if(!live&&s.showAds){var popA=s.ads.pop,socA=s.ads.social;var bits=[];if(popA.code.trim())bits.push(popA.network+" Popunder: ON");if(socA.code.trim())bits.push(socA.network+" Social Bar: ON");if(bits.length)popNote='<div data-inline="ad" data-slot="'+(popA.code.trim()?"pop":"social")+'" style="background:#111827;color:#FDE68A;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;margin-bottom:14px">⚡ '+bits.join(" &nbsp;•&nbsp; ")+' — runs on your hosted page</div>';}
+ var sticky="";
+ if(live){sticky=adSlotHTML(s,slotByKey("sticky"),true);}else if(s.showAds){var st=s.ads.sticky;sticky='<div data-inline="ad" data-slot="sticky" style="border-top:2px dashed '+(st.code.trim()?"#0A7A5E":"#CBD5CB")+';color:#475569;font-size:12px;font-weight:600;text-align:center;padding:10px;margin-top:22px">📌 STICKY FOOTER SLOT — '+(st.code.trim()?(esc(st.network)+" code added"):"no code yet")+'</div>';}
+ var footerLine=(s.footerText?esc(s.footerText)+" • ":"")+esc(s.pageTitle)+(s.plan==="Pro"?" • Made with PageCraft":"");
+ return '<div data-inline="page" style="font-family:'+s.font+';background:'+s.bg+';color:'+txt+';padding:'+pad+';text-align:'+(center?"center":"left")+'">'+popNote+hero+adSlotHTML(s,slotByKey("topbanner"),live)+feat+adSlotHTML(s,slotByKey("incontent"),live)+blocks+adSlotHTML(s,slotByKey("native"),live)+price+proof+'<div style="margin-top:28px;padding-top:16px;border-top:1px solid '+line+';color:'+sub+';font-size:12.5px;text-align:center">'+footerLine+'</div>'+sticky+'</div>';
+}
+function renderPreview(){if(!state)return;var pv=document.getElementById("livePreview");pv.innerHTML=previewHTMLFor(state,previewDevice,false);pv.classList.toggle("inlineOn",inlineMode);if(selInline){var elq=pv.querySelector('[data-inline="'+selInline.kind+'"]'+(selInline.idx!=null?'[data-idx="'+selInline.idx+'"]':""));if(elq)elq.classList.add("selEl");}}
+
+/* ---- Inline editing from the preview ---- */
+function toggleInlineMode(){inlineMode=!inlineMode;document.getElementById("inlineToggle").textContent="✏️ Click-to-Edit: "+(inlineMode?"ON":"OFF");document.getElementById("inlineToggle").classList.toggle("active",inlineMode);if(!inlineMode)closeInline();renderPreview();}
+function fontOptions(sel){return FONTS.map(function(f){return '<option value="'+f[0]+'"'+(sel===f[0]?" selected":"")+'>'+f[1]+'</option>';}).join("");}
+function colorField(label,path,val,fallback){return '<label>'+label+'</label><div class="colorRow"><input type="color" value="'+(val||fallback)+'" oninput="inlineColor(\''+path+'\',this.value)"><span>'+(val?val:"Theme default")+'</span><button class="btn outline" style="padding:6px 10px;font-size:12px" onclick="inlineColor(\''+path+'\',\'\')">Reset</button></div>';}
+function setPath(path,val){var parts=path.split(".");var o=state;for(var i=0;i<parts.length-1;i++)o=o[parts[i]];o[parts[parts.length-1]]=val;}
+function getPath(path){var parts=path.split(".");var o=state;for(var i=0;i<parts.length;i++)o=o[parts[i]];return o;}
+function inlineSet(path,val){setPath(path,val);renderPreview();}
+function inlineNum(path,val){setPath(path,parseInt(val,10)||0);renderPreview();}
+function inlineColor(path,val){setPath(path,val);renderPreview();if(selInline)openInline(selInline.kind,selInline.idx,true);}
+function inlineText(path,val){setPath(path,val);if(path==="headline"||path==="sub"||path==="badge"||path==="ctaText")syncFormSoft();renderPreview();}
+function syncFormSoft(){["pageTitle","badge","headline","sub","ctaText","ctaUrl","imageAlt","footerText"].forEach(function(k){var el=document.getElementById("f_"+k);if(el&&state[k]!=null)el.value=state[k];});}
+function openInline(kind,idx,keep){
+ selInline={kind:kind,idx:(idx==null?null:idx)};
+ var bar=document.getElementById("inlineBar");bar.style.display="block";
+ var T=document.getElementById("inlineTitle"),F=document.getElementById("inlineFields");var h="";
+ if(kind==="headline"){var e=state.el.headline;T.textContent="✏️ Headline";h='<label>Headline text</label><textarea oninput="inlineText(\'headline\',this.value)">'+esc(state.headline)+'</textarea><label>Font</label><select onchange="inlineSet(\'el.headline.font\',this.value)"><option value="">Page font (default)</option>'+fontOptions(e.font)+'</select><label>Size — '+(e.size||state.dev[previewDevice].hSize)+'px (0 = device default)</label><input type="range" min="0" max="72" value="'+(e.size||0)+'" oninput="inlineNum(\'el.headline.size\',this.value)">'+colorField("Text colour","el.headline.color",e.color,"#111827")+'<label>Style</label><div class="seg"><button class="'+(e.bold?"active":"")+'" onclick="inlineSet(\'el.headline.bold\',!state.el.headline.bold);openInline(\'headline\',null,true)">Bold</button><button class="'+(e.align==="center"?"active":"")+'" onclick="inlineSet(\'el.headline.align\',\'center\');openInline(\'headline\',null,true)">Center</button><button class="'+(e.align==="left"?"active":"")+'" onclick="inlineSet(\'el.headline.align\',\'left\');openInline(\'headline\',null,true)">Left</button><button onclick="inlineSet(\'el.headline.align\',\'\');openInline(\'headline\',null,true)">Auto</button></div>';}
+ else if(kind==="sub"){var e2=state.el.sub;T.textContent="✏️ Description text";h='<label>Text</label><textarea oninput="inlineText(\'sub\',this.value)">'+esc(state.sub)+'</textarea><label>Font</label><select onchange="inlineSet(\'el.sub.font\',this.value)"><option value="">Page font (default)</option>'+fontOptions(e2.font)+'</select><label>Size — '+(e2.size||16)+'px (0 = default)</label><input type="range" min="0" max="28" value="'+(e2.size||0)+'" oninput="inlineNum(\'el.sub.size\',this.value)">'+colorField("Text colour","el.sub.color",e2.color,"#4B5563");}
+ else if(kind==="badge"){var e3=state.el.badge;T.textContent="✏️ Badge";h='<label>Badge text</label><input type="text" value="'+esc(state.badge)+'" oninput="inlineText(\'badge\',this.value)">'+colorField("Text colour","el.badge.color",e3.color,state.color)+colorField("Background colour","el.badge.bg",e3.bg,"#FFFFFF");}
+ else if(kind==="cta"){var e4=state.el.cta;T.textContent="✏️ Main button";h='<label>Button text</label><input type="text" value="'+esc(state.ctaText)+'" oninput="inlineText(\'ctaText\',this.value)"><label>Button link</label><input type="url" value="'+esc(state.ctaUrl)+'" oninput="inlineText(\'ctaUrl\',this.value)"><label>Font</label><select onchange="inlineSet(\'el.cta.font\',this.value)"><option value="">Page font (default)</option>'+fontOptions(e4.font)+'</select><label>Text size — '+(e4.size||16)+'px (0 = default)</label><input type="range" min="0" max="26" value="'+(e4.size||0)+'" oninput="inlineNum(\'el.cta.size\',this.value)">'+colorField("Button colour","el.cta.bg",e4.bg,state.color)+colorField("Text colour","el.cta.color",e4.color,"#FFFFFF")+'<label>Shape</label><div class="seg"><button onclick="inlineSet(\'el.cta.radius\',\'999px\')">Rounded</button><button onclick="inlineSet(\'el.cta.radius\',\'12px\')">Soft Square</button><button onclick="inlineSet(\'el.cta.radius\',\'4px\')">Square</button><button onclick="inlineSet(\'el.cta.radius\',\'\')">Theme</button></div><label>Glow shadow</label><div class="seg"><button class="'+(e4.shadow?"active":"")+'" onclick="inlineSet(\'el.cta.shadow\',!state.el.cta.shadow);openInline(\'cta\',null,true)">'+(e4.shadow?"Shadow: ON":"Shadow: OFF")+'</button></div>';}
+ else if(kind==="image"){T.textContent="🖼 Hero image";h='<label>Image URL</label><input type="url" placeholder="https://…" value="'+(state.image&&state.image.indexOf("data:")!==0?esc(state.image):"")+'" oninput="inlineText(\'image\',this.value)"><label>Or upload an image</label><input type="file" accept="image/*" onchange="onUpload(this)"><label>Alt text</label><input type="text" value="'+esc(state.imageAlt)+'" oninput="inlineText(\'imageAlt\',this.value)"><label>Corner roundness — '+state.imgRadius+'px</label><input type="range" min="0" max="40" value="'+state.imgRadius+'" oninput="inlineNum(\'imgRadius\',this.value)"><label>Visibility</label><div class="seg"><button class="'+(state.dev[previewDevice].hideImage?"":"active")+'" onclick="devShowImage(false)">Show on '+(previewDevice==="mobile"?"Mobile":"Desktop")+'</button><button class="'+(state.dev[previewDevice].hideImage?"active":"")+'" onclick="devShowImage(true)">Hide on '+(previewDevice==="mobile"?"Mobile":"Desktop")+'</button></div>'+(state.image?'<button class="btn outline" style="margin-top:12px" onclick="inlineText(\'image\',\'\');openInline(\'image\',null,true)">Remove image</button>':"");}
+ else if(kind==="block"){var b=state.blocks[idx];T.textContent="✏️ Block "+(idx+1)+" — "+b.type;h=(b.type!=="text"?'<label>Title / Label</label><input type="text" value="'+esc(b.title||b.label||"")+'" oninput="inlineBlock(\'title\',this.value)">':"")+'<label>Text</label><textarea oninput="inlineBlock(\'text\',this.value)">'+esc(b.text||"")+'</textarea>'+(b.type==="button"?'<label>Button link</label><input type="url" value="'+esc(b.url||"#")+'" oninput="inlineBlock(\'url\',this.value)">':"")+'<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn outline" style="padding:8px 12px" onclick="moveBlock('+idx+',-1)">↑ Move up</button><button class="btn outline" style="padding:8px 12px" onclick="moveBlock('+idx+',1)">↓ Move down</button><button class="btn outline" style="padding:8px 12px" onclick="dupBlock('+idx+')">⧉ Duplicate</button><button class="btn outline" style="padding:8px 12px" onclick="delBlock('+idx+');closeInline()">✕ Delete</button></div>';}
+ else if(kind==="feat"){var f=state.featCards[idx];T.textContent="✏️ Feature card "+(idx+1);h='<label>Icon (emoji or symbol)</label><input type="text" maxlength="4" value="'+esc(f.icon||"⚡")+'" oninput="inlineFeat(\'icon\',this.value)"><label>Title</label><input type="text" value="'+esc(f.t)+'" oninput="inlineFeat(\'t\',this.value)"><label>Text</label><textarea oninput="inlineFeat(\'x\',this.value)">'+esc(f.x)+'</textarea><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn outline" style="padding:8px 12px" onclick="dupFeat('+idx+')">⧉ Duplicate</button><button class="btn outline" style="padding:8px 12px" onclick="delFeat('+idx+');closeInline()">✕ Delete feature</button></div>';}
+ else if(kind==="price"){T.textContent="✏️ Price / Offer section";h='<label>Price</label><input type="text" value="'+esc(state.price.amount)+'" oninput="inlinePrice(\'amount\',this.value)"><label>Old price (crossed out)</label><input type="text" value="'+esc(state.price.old)+'" oninput="inlinePrice(\'old\',this.value)"><label>Note</label><input type="text" value="'+esc(state.price.note)+'" oninput="inlinePrice(\'note\',this.value)">';}
+ else if(kind==="proof"){T.textContent="✏️ Testimonial";h='<label>Quote</label><textarea oninput="inlineProof(\'quote\',this.value)">'+esc(state.proof.quote)+'</textarea><label>Author line</label><input type="text" value="'+esc(state.proof.author)+'" oninput="inlineProof(\'author\',this.value)">';}
+ else if(kind==="ad"){var sl=slotByKey(idx);T.textContent="📢 Ad slot — "+sl.label;h='<p style="color:var(--muted);font-size:13.5px">Network for this slot: <b>'+esc(state.ads[sl.key].network)+'</b>'+(state.ads[sl.key].code.trim()?" • Code added ✓":" • No code yet")+'</p><button class="btn" onclick="switchTab(\'ads\')">Open Ads Tab — Paste / Change Code</button>';selInline={kind:"ad",idx:idx};}
+ else if(kind==="page"){T.textContent="🎨 Page style";h='<label>Theme colour</label><div class="swatchRow">'+COLORS.map(function(c){return '<button class="swatch '+(c===state.color?"sel":"")+'" style="background:'+c+'" onclick="setColor(\''+c+'\');openInline(\'page\',null,true)"></button>';}).join("")+'</div><label>Page font</label><select onchange="inlineSet(\'font\',this.value)">'+fontOptions(state.font)+'</select><label>Background</label><div class="seg"><button onclick="inlineSet(\'bg\',\'#FFFFFF\');openInline(\'page\',null,true)">White</button><button onclick="inlineSet(\'bg\',\'#FFF8E7\');openInline(\'page\',null,true)">Warm</button><button onclick="inlineSet(\'bg\',\'#0F172A\');openInline(\'page\',null,true)">Dark Navy</button><button onclick="inlineSet(\'bg\',\'#111111\');openInline(\'page\',null,true)">Black</button><button onclick="inlineSet(\'bg\',\'#F0FDF6\');openInline(\'page\',null,true)">Mint</button></div><label>Footer line</label><input type="text" value="'+esc(state.footerText)+'" oninput="inlineText(\'footerText\',this.value)">';}
+ F.innerHTML=h;
+ renderPreview();
+}
+function inlineBlock(k,v){if(!selInline||selInline.idx==null)return;var b=state.blocks[selInline.idx];if(k==="title"){b.title=v;b.label=v;}else b[k]=v;renderBlocks();renderPreview();}
+function inlineFeat(k,v){if(!selInline||selInline.idx==null)return;state.featCards[selInline.idx][k]=v;renderFeatEditor();renderPreview();}
+function inlinePrice(k,v){state.price[k]=v;renderPreview();}
+function inlineProof(k,v){state.proof[k]=v;renderPreview();}
+function dupBlock(i){state.blocks.splice(i+1,0,clone(state.blocks[i]));renderBlocks();renderPreview();toast("Block duplicated");}
+function devShowImage(hide){state.dev[previewDevice].hideImage=hide;renderDevPanels();renderPreview();openInline("image",null,true);}
+function closeInline(){selInline=null;document.getElementById("inlineBar").style.display="none";renderPreview();}
+document.getElementById("livePreview").addEventListener("click",function(ev){
+ var a=ev.target.closest("a");if(a)ev.preventDefault();
+ if(!inlineMode||!state)return;
+ var t=ev.target.closest("[data-inline]");
+ if(!t){openInline("page");return;}
+ var kind=t.getAttribute("data-inline");
+ var idx=t.hasAttribute("data-idx")?parseInt(t.getAttribute("data-idx"),10):(t.hasAttribute("data-slot")?t.getAttribute("data-slot"):null);
+ openInline(kind,idx);
+ if(window.innerWidth<=900){document.getElementById("inlineBar").scrollIntoView({behavior:"smooth",block:"nearest"});}
+});
+
+/* ---- Publish & hosting on this domain ---- */
+function currentSlug(){var v=document.getElementById("f_slug").value;return slugify(v||state.publishedSlug||state.pageTitle);}
+function onSlugInput(){updatePublishUI();}
+function updatePublishUI(){if(!state)return;var slug=currentSlug();var path="/p/"+slug;var pp=document.getElementById("publishPath");if(pp)pp.textContent=path;var up=document.getElementById("urlPill");if(up)up.textContent=path;var btn=document.getElementById("publishBtn");if(btn&&state.publishedSlug===slug)btn.textContent="🔄 Update Published Page";else if(btn)btn.textContent="🚀 Publish — Host on This Domain";}
+function publishPage(){
+ var slug=currentSlug();state.publishedSlug=slug;
+ var snap=clone(state);
+ var existing=null;hosted.forEach(function(hp){if(hp.slug===slug)existing=hp;});
+ if(existing){existing.state=snap;existing.title=state.pageTitle;existing.when="just now";}
+ else{hosted.push({slug:slug,title:state.pageTitle,state:snap,when:"just now"});}
+ document.getElementById("publishStatus").innerHTML='<div class="notice" style="background:#DFF5EC;border-color:#9AD8BE;color:#075E48;margin-bottom:2px">✅ <b>Live!</b> Your page is now hosted on this PageCraft domain at <b>/p/'+slug+'</b>. Phone visitors see the mobile design, computer visitors see the desktop design.</div>';
+ renderHosted();updatePublishUI();toast("Published — hosted at /p/"+slug);
+}
+function renderHosted(){
+ var sec=document.getElementById("myPages");
+ if(!hosted.length){sec.style.display="none";}
+ else{sec.style.display="block";document.getElementById("hostedGrid").innerHTML=hosted.map(function(hp,i){
+   return '<article class="hostedCard"><span class="status on">● LIVE</span><h3>'+esc(hp.title)+'</h3><p>pagecraft domain • /p/'+hp.slug+'</p><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" style="padding:9px 14px" onclick="viewLive(\''+hp.slug+'\')">View Live →</button><button class="btn outline" style="padding:9px 14px" onclick="editHosted('+i+')">Edit</button><button class="btn outline" style="padding:9px 14px" onclick="unpublish('+i+')">Unpublish</button></div></article>';
+ }).join("");}
+ var bl=document.getElementById("hostedListBuilder");
+ if(bl){bl.innerHTML=hosted.length?'<label>Your hosted pages</label>'+hosted.map(function(hp){return '<div class="blockItem"><div><b>/p/'+hp.slug+'</b><span>'+esc(hp.title)+'</span></div><button class="iconBtn" title="View live" onclick="viewLive(\''+hp.slug+'\')">👁</button></div>';}).join(""):"";}
+}
+function editHosted(i){openBuilder(hosted[i].state);}
+function unpublish(i){var hp=hosted[i];hosted.splice(i,1);if(state&&state.publishedSlug===hp.slug){state.publishedSlug="";}renderHosted();updatePublishUI();toast("Page unpublished");}
+function viewLiveCurrent(){if(!state)return;if(!state.publishedSlug){switchTab("publish");toast("Set your page address and press Publish first");return;}viewLive(state.publishedSlug);}
+function viewLive(slug){
+ var entry=null;hosted.forEach(function(hp){if(hp.slug===slug)entry=hp;});
+ if(!entry){if(state&&state.publishedSlug===slug){entry={slug:slug,state:clone(state)};}else{toast("That page is not published yet");return;}}
+ liveSnapshot=entry.state;liveSlug=slug;
+ document.getElementById("homeView").style.display="none";document.getElementById("builderView").classList.remove("show");
+ document.getElementById("liveView").classList.add("show");
+ document.getElementById("livePathLabel").textContent="pagecraft • /p/"+slug;
+ renderLive();window.scrollTo({top:0});
+}
+function renderLive(){
+ if(!liveSnapshot)return;
+ var devName=(window.innerWidth<=640)?"mobile":"desktop";
+ document.getElementById("liveDeviceLabel").textContent=(devName==="mobile"?"📱 Mobile design — shown because this screen is a phone width":"💻 Desktop design — resize to phone width to see the mobile design");
+ document.getElementById("liveCanvas").innerHTML=previewHTMLFor(liveSnapshot,devName,true);
+ injectLiveAds(liveSnapshot);
+}
+function injectLiveAds(s){
+ AD_SLOTS.forEach(function(slot){
+  var a=s.ads[slot.key];if(!a||!a.code.trim())return;
+  var target=null;
+  if(slot.key==="pop"||slot.key==="social"){target=document.getElementById("liveCanvas");}
+  else{target=document.querySelector('#liveCanvas [data-livead="'+slot.key+'"]');}
+  if(!target)return;
+  try{
+   var doc=new DOMParser().parseFromString(a.code,"text/html");
+   Array.prototype.slice.call(doc.body.childNodes).forEach(function(node){
+     if(node.tagName==="SCRIPT"){var sc=document.createElement("script");Array.prototype.slice.call(node.attributes).forEach(function(at){sc.setAttribute(at.name,at.value);});if(node.textContent)sc.textContent=node.textContent;target.appendChild(sc);}
+     else{target.appendChild(document.importNode(node,true));}
+   });
+  }catch(e){}
+ });
+}
+function backFromLive(){document.getElementById("liveView").classList.remove("show");if(state){document.getElementById("builderView").classList.add("show");renderPreview();}else{showHome();}window.scrollTo({top:0});}
+var resizeTimer;window.addEventListener("resize",function(){if(document.getElementById("liveView").classList.contains("show")){clearTimeout(resizeTimer);resizeTimer=setTimeout(renderLive,200);}});
+var toastTimer;function toast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove("show");},2600);}
+renderPills();renderGallery();
+</script>
+</body>
+</html>
