@@ -1,4 +1,4 @@
-// PageCraft AI proxy (Vercel serverless function) — Groq edition.
+// PageCraft AI proxy (Vercel serverless function) — Assistant edition.
 // The Groq API key lives ONLY in the Vercel environment variable
 // GROQ_API_KEY. It is never sent to the browser and never appears
 // in this file. The page POSTs { prompt } here and receives back
@@ -97,11 +97,15 @@ module.exports = async function handler(req, res) {
         headline: typeof out.headline === 'string' ? out.headline : '',
         sub: typeof out.sub === 'string' ? out.sub : '',
         buttonText: typeof out.buttonText === 'string' ? out.buttonText : '',
+        ctaText: typeof out.buttonText === 'string' ? out.buttonText : '',
         color: typeof out.color === 'string' && /^#[0-9a-fA-F]{6}$/.test(out.color) ? out.color : '#111111',
         features: Array.isArray(out.features) ? out.features.filter(function (f) {
           return f && typeof f.title === 'string' && typeof f.text === 'string';
         }).slice(0, 6).map(function (f) { return { title: f.title, text: f.text }; }) : []
       };
+      // The site's reader looks for a chat-style answer first, so include
+      // that shape too; the plain page fields stay on top for direct use.
+      clean.choices = [{ message: { content: JSON.stringify(clean) } }];
       res.status(200).json(clean);
       return;
     }
