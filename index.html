@@ -651,6 +651,38 @@ button,a,input,select,textarea,label{touch-action:manipulation}
 .posCtl{border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:14px;background:var(--surface2)}
 .posCtl label{margin-top:8px}
 </style>
+<style>
+/* ===== v7 — Accounts: Firebase Auth + Firestore sync ===== */
+.authArea{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.authArea .btn{padding:9px 15px;font-size:14px}
+.authUser{display:inline-flex;align-items:center;gap:8px;max-width:230px;font-weight:700;font-size:14px;border:1.5px solid var(--ink);border-radius:999px;padding:7px 13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.authUser::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink);flex:none}
+.authGear{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:9px 12px;font-weight:600;font-size:13.5px;cursor:pointer}
+.authGear svg{width:16px;height:16px;flex:none}
+.authGear:hover{border-color:var(--ink)}
+input[type=email],input[type=password]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+input[type=email]:focus,input[type=password]:focus{border-color:var(--ink);outline:none}
+.authTabs{display:flex;gap:6px;margin:2px 0 6px}
+.authTabs button{flex:1;padding:10px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;cursor:pointer;font-size:14.5px}
+.authTabs button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.authCardMsg{margin-top:14px}
+.authCardMsg:empty{display:none}
+.modalCard .fieldNote{font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.55}
+.fbSteps{margin:0 0 14px;padding-left:20px}
+.fbSteps li{margin:7px 0;font-size:14px;line-height:1.55}
+.fbSteps .mono,.modalCard .mono{font-family:ui-monospace,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:4px}
+.fbPaste{min-height:96px}
+.fbStatus{border:1px solid var(--line);border-radius:8px;padding:11px 13px;font-size:13.5px;line-height:1.55;background:var(--surface2);margin:0 0 6px}
+.fbStatus b{font-weight:800}
+.modalBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.modalBtns .btn{flex:1;min-width:130px}
+@media(max-width:700px){
+ .authArea{order:4;flex:1 1 100%}
+ .authArea .btn,.authGear{min-height:44px;flex:1;justify-content:center}
+ .authUser{flex:1 1 100%;max-width:none;justify-content:center}
+ input[type=email],input[type=password]{font-size:16px}
+}
+</style>
 </head>
 </head>
 <body>
@@ -663,6 +695,13 @@ button,a,input,select,textarea,label{touch-action:manipulation}
     <button data-page="how" onclick="showPage('how')">How it works</button>
     <button data-page="mypages" onclick="showPage('mypages')">My Pages</button>
   </nav>
+  <div class="authArea" id="authArea">
+    <span class="authUser" id="authUser" style="display:none"></span>
+    <button class="btn outline" id="authLoginBtn" onclick="pcAuthOpen('login')">Login</button>
+    <button class="btn outline" id="authRegisterBtn" onclick="pcAuthOpen('register')">Register</button>
+    <button class="btn" id="authLogoutBtn" style="display:none" onclick="pcAuthLogout()">Logout</button>
+    <button class="authGear" id="fbSettingsBtn" onclick="pcFbSettingsOpen()" title="Firebase Settings — connect your own Firebase project" aria-label="Firebase Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Firebase Settings</button>
+  </div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn" onclick="openBuilder('blank')">Create</button>
   </div>
@@ -800,6 +839,7 @@ button,a,input,select,textarea,label{touch-action:manipulation}
     <section id="myPages" data-app-page="mypages">
       <h2 style="font-size:28px;margin:18px 0 6px;font-weight:800;letter-spacing:-.02em">My hosted pages</h2>
       <p style="color:var(--muted);margin:0 0 14px">Pages you published from the builder. Each one carries a full public link — anyone who opens it, in any browser on any device, sees the page exactly as you designed it, ads included, and sees only the page. Phone visitors see the mobile design, computer visitors see the desktop design.</p>
+      <div id="myPagesSyncNote"></div>
       <div class="grid" id="hostedGrid"></div>
     </section>
 
@@ -1198,6 +1238,84 @@ button,a,input,select,textarea,label{touch-action:manipulation}
   </div>
   <div id="liveCanvas"></div>
 </main>
+
+<div class="modalOverlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="modalCard">
+    <h3 id="authTitle">Welcome back</h3>
+    <p id="authSub">Log in to see your pages on any device. New here? Register a free account.</p>
+    <div class="authTabs" role="tablist" aria-label="Login or register">
+      <button type="button" id="authTabLogin" onclick="pcAuthSetMode('login')">Login</button>
+      <button type="button" id="authTabRegister" onclick="pcAuthSetMode('register')">Register</button>
+    </div>
+    <form id="authForm" onsubmit="return pcAuthSubmit(event)" autocomplete="on" novalidate>
+      <div id="authNameWrap" style="display:none">
+        <label for="authName">Your name</label>
+        <input type="text" id="authName" autocomplete="name" placeholder="e.g. Alex Rahman">
+      </div>
+      <label for="authEmail">Email</label>
+      <input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com" required>
+      <label for="authPass">Password</label>
+      <input type="password" id="authPass" autocomplete="current-password" placeholder="Your password" required>
+      <p class="fieldNote" id="authPassNote" style="display:none">At least 6 characters. You stay logged in on this device until you log out.</p>
+      <div class="authCardMsg" id="authMsg" aria-live="polite"></div>
+      <div class="modalBtns">
+        <button type="submit" class="btn" id="authSubmitBtn">Login</button>
+        <button type="button" class="btn outline" onclick="pcCloseModal('authModal')">Cancel</button>
+      </div>
+    </form>
+    <p class="fieldNote" style="margin-top:14px">Accounts are powered by Firebase Authentication, using the Firebase project connected in <button type="button" onclick="pcCloseModal('authModal');pcFbSettingsOpen()" style="background:none;border:0;padding:0;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Firebase Settings</button>.</p>
+  </div>
+</div>
+
+<div class="modalOverlay" id="fbSetupModal" role="dialog" aria-modal="true" aria-labelledby="fbSetupTitle">
+  <div class="modalCard">
+    <h3 id="fbSetupTitle">Connect Firebase first</h3>
+    <p>Login, registration and cross-device page saving run on <b>Firebase</b> — and this site is not connected to a Firebase project yet, so accounts cannot work until the site owner connects one. It takes a couple of minutes and the config is kept <b>only in this browser</b>:</p>
+    <ol class="fbSteps">
+      <li>Open the <span class="mono">Firebase console</span> and create a free project.</li>
+      <li>In the project, add a <b>Web app</b> — Firebase shows a <span class="mono">firebaseConfig</span> block with your keys.</li>
+      <li>Turn on <b>Authentication → Email/Password</b> and create a <b>Firestore Database</b>.</li>
+      <li>Paste the config into <b>Firebase Settings</b> here — then Login and Register work straight away.</li>
+    </ol>
+    <div class="modalBtns">
+      <button type="button" class="btn" onclick="pcCloseModal('fbSetupModal');pcFbSettingsOpen()">Open Firebase Settings</button>
+      <button type="button" class="btn outline" onclick="pcCloseModal('fbSetupModal')">Not now</button>
+    </div>
+    <p class="fieldNote" style="margin-top:14px">No account? No problem — the builder keeps working locally in this browser exactly as before, and your pages stay listed under My Pages on this device.</p>
+  </div>
+</div>
+
+<div class="modalOverlay" id="fbSettingsModal" role="dialog" aria-modal="true" aria-labelledby="fbSettingsTitle">
+  <div class="modalCard">
+    <h3 id="fbSettingsTitle">Firebase Settings</h3>
+    <p>Connect this site to your own Firebase project. The config is stored <b>only in this browser</b> — it is never sent anywhere except to Firebase itself. Login, registration and account-saved pages all run on your project.</p>
+    <div class="fbStatus" id="fbStatus">Checking…</div>
+    <label for="fbPaste">Paste your firebaseConfig (fastest)</label>
+    <textarea id="fbPaste" class="code fbPaste" spellcheck="false" placeholder="Paste the whole firebaseConfig block from Firebase console → Project settings → Your apps → Web app"></textarea>
+    <button type="button" class="btn outline" style="padding:9px 14px;margin-top:10px" onclick="pcFbParsePaste()">Fill fields from paste</button>
+    <div class="row2">
+      <div><label for="fbApiKey">API key</label><input type="text" id="fbApiKey" spellcheck="false" autocomplete="off" placeholder="AIza…"></div>
+      <div><label for="fbAppId">App ID</label><input type="text" id="fbAppId" spellcheck="false" autocomplete="off" placeholder="1:1234567890:web:abc…"></div>
+    </div>
+    <div class="row2">
+      <div><label for="fbAuthDomain">Auth domain</label><input type="text" id="fbAuthDomain" spellcheck="false" autocomplete="off" placeholder="your-project.firebaseapp.com"></div>
+      <div><label for="fbProjectId">Project ID</label><input type="text" id="fbProjectId" spellcheck="false" autocomplete="off" placeholder="your-project"></div>
+    </div>
+    <div class="row2">
+      <div><label for="fbBucket">Storage bucket</label><input type="text" id="fbBucket" spellcheck="false" autocomplete="off" placeholder="your-project.appspot.com"></div>
+      <div><label for="fbSender">Messaging sender ID</label><input type="text" id="fbSender" spellcheck="false" autocomplete="off" placeholder="1234567890"></div>
+    </div>
+    <div class="authCardMsg" id="fbSettingsMsg" aria-live="polite"></div>
+    <div class="modalBtns">
+      <button type="button" class="btn" id="fbSaveBtn" onclick="pcFbSaveSettings()">Save &amp; Connect</button>
+      <button type="button" class="btn outline" onclick="pcCloseModal('fbSettingsModal')">Close</button>
+    </div>
+    <div class="modalBtns" style="margin-top:8px">
+      <button type="button" class="btn outline" id="fbRemoveBtn" onclick="pcFbRemoveSettings()">Remove config from this browser</button>
+    </div>
+    <p class="fieldNote" style="margin-top:14px">In your Firebase project, also make sure: <b>Authentication → Sign-in method → Email/Password</b> is enabled, a <b>Firestore Database</b> exists, and this site's domain is listed under <b>Authentication → Settings → Authorised domains</b>.</p>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -2437,6 +2555,324 @@ function pcRoutePublic(){
 }
 window.addEventListener("hashchange",pcRoutePublic);
 pcRoutePublic();
+</script>
+<script>
+/* ===== Accounts — Firebase Auth + Firestore =====
+   The Firebase web config is supplied by the site owner in Firebase Settings
+   and kept only in this browser (localStorage). Nothing is hardcoded here.
+   Logged out: everything works locally in this browser, exactly as before.
+   Logged in: published pages (My Pages) are saved to the user's Firestore
+   account and load on any device. */
+var FB_CFG_KEY="pagecraft_firebase_config_v1";
+var fbConfig=null,fbApp=null,fbAuth=null,fbDb=null,fbUser=null;
+var fbSdkPromise=null,fbCloudReady=false,fbCloudSlugs={},fbSyncTimer=null,fbSyncErrShown=false;
+var fbAuthMode="login";
+
+/* ---------- config storage (this browser only) ---------- */
+function fbLoadConfig(){
+ try{var raw=localStorage.getItem(FB_CFG_KEY);if(!raw)return null;var c=JSON.parse(raw);
+  if(c&&c.apiKey&&c.authDomain&&c.projectId&&c.appId)return c;}catch(e){}
+ return null;
+}
+function fbStoreConfig(c){try{localStorage.setItem(FB_CFG_KEY,JSON.stringify(c));}catch(e){}}
+function fbDropConfig(){try{localStorage.removeItem(FB_CFG_KEY);}catch(e){}}
+
+/* ---------- Firebase SDK (loaded from the Firebase CDN only when a config exists) ---------- */
+function fbLoadSdk(){
+ if(window.firebase&&firebase.auth&&firebase.firestore)return Promise.resolve(true);
+ if(fbSdkPromise)return fbSdkPromise;
+ var base="https://www.gstatic.com/firebasejs/10.12.2/";
+ var files=["firebase-app-compat.js","firebase-auth-compat.js","firebase-firestore-compat.js"];
+ fbSdkPromise=files.reduce(function(p,f){
+  return p.then(function(){return new Promise(function(res,rej){
+   var s=document.createElement("script");s.src=base+f;s.async=true;
+   s.onload=function(){res();};s.onerror=function(){rej(new Error("sdk load failed"));};
+   document.head.appendChild(s);
+  });});
+ },Promise.resolve()).then(function(){return true;},function(){fbSdkPromise=null;return false;});
+ return fbSdkPromise;
+}
+function fbInit(){
+ fbConfig=fbLoadConfig();
+ if(!fbConfig)return Promise.resolve(false);
+ return fbLoadSdk().then(function(ok){
+  if(!ok)return false;
+  if(!fbApp){
+   fbApp=(firebase.apps&&firebase.apps.length)?firebase.app():firebase.initializeApp(fbConfig);
+   fbAuth=firebase.auth();fbDb=firebase.firestore();
+   fbAuth.onAuthStateChanged(fbOnAuthState);
+  }
+  return true;
+ }).catch(function(){return false;});
+}
+
+/* ---------- header + My Pages note ---------- */
+function fbRenderAuth(){
+ var loggedIn=!!fbUser;
+ var lb=document.getElementById("authLoginBtn"),rb=document.getElementById("authRegisterBtn"),
+     ob=document.getElementById("authLogoutBtn"),u=document.getElementById("authUser");
+ if(!lb)return;
+ lb.style.display=loggedIn?"none":"";rb.style.display=loggedIn?"none":"";
+ ob.style.display=loggedIn?"":"none";
+ if(loggedIn){u.style.display="";u.textContent=fbUser.displayName||fbUser.email||"My account";u.title=fbUser.email||"";}
+ else{u.style.display="none";u.textContent="";}
+ fbUpdateNote();
+}
+function fbUpdateNote(){
+ var n=document.getElementById("myPagesSyncNote");if(!n)return;
+ if(fbUser){
+  n.innerHTML='<div class="notice" style="margin:0 0 14px"><b>Signed in as '+esc(fbUser.displayName||fbUser.email)+'</b> — these pages are saved to your account in Firebase, so they appear here on any device where you log in. Publishing or unpublishing updates your account automatically.</div>';
+ }else if(fbConfig){
+  n.innerHTML='<div class="notice" style="margin:0 0 14px">You are working <b>locally in this browser</b>. <b>Log in</b> (top of the page) to save your pages to your account and open them on any device.</div>';
+ }else{
+  n.innerHTML="";
+ }
+}
+
+/* ---------- auth state ---------- */
+function fbOnAuthState(user){
+ var prev=fbUser;
+ fbUser=user||null;
+ fbRenderAuth();
+ if(fbUser){
+  if(!prev||prev.uid!==fbUser.uid){fbCloudReady=false;fbLoadCloudPages();}
+ }else{
+  fbCloudReady=false;
+  if(prev)fbRemoveCloudOnly();
+ }
+}
+function fbRemoveCloudOnly(){
+ var changed=false;
+ for(var i=hosted.length-1;i>=0;i--){if(hosted[i].cloudOnly){hosted.splice(i,1);changed=true;}}
+ fbCloudSlugs={};
+ if(changed)renderHosted();
+}
+
+/* ---------- Firestore: load this user's pages ---------- */
+function fbPagesRef(){return fbDb.collection("users").doc(fbUser.uid).collection("pages");}
+function fbLoadCloudPages(){
+ if(!fbUser||!fbDb)return;
+ fbPagesRef().get().then(function(snap){
+  var loaded=0;
+  snap.forEach(function(d){
+   var v=d.data()||{};if(!v.state)return;
+   var ex=null;hosted.forEach(function(hp){if(hp.slug===d.id)ex=hp;});
+   if(ex){ex.state=v.state;ex.title=v.title||ex.title;ex.link=v.link||ex.link;ex.when=v.when||ex.when;delete ex.cloudOnly;}
+   else{hosted.push({slug:d.id,title:v.title||"Untitled page",state:v.state,link:v.link||"",when:v.when||"saved to your account",cloudOnly:true});}
+   fbCloudSlugs[d.id]=true;loaded++;
+  });
+  fbCloudReady=true;
+  renderHosted();
+  if(loaded)toast(loaded+" page"+(loaded===1?"":"s")+" loaded from your account");
+ }).catch(function(){
+  fbCloudReady=false;
+  toast("You are signed in, but your saved pages could not be loaded. Check your connection — and if this is a new Firebase project, make sure Firestore is created and its rules allow your account to read its own pages","error");
+ });
+}
+
+/* ---------- Firestore: keep the account copy of My Pages in sync ----------
+   renderHosted() runs after every publish, unpublish and live-page edit,
+   so wrapping it syncs all of those changes with one debounced writer. */
+var pcOrigRenderHosted=renderHosted;
+renderHosted=function(){pcOrigRenderHosted();fbScheduleSync();};
+function fbScheduleSync(){
+ if(!fbUser||!fbDb||!fbCloudReady)return;
+ clearTimeout(fbSyncTimer);fbSyncTimer=setTimeout(fbSyncNow,900);
+}
+function fbSyncNow(){
+ if(!fbUser||!fbDb||!fbCloudReady)return;
+ var ref=fbPagesRef(),batch=fbDb.batch(),seen={},stamp=firebase.firestore.FieldValue.serverTimestamp();
+ hosted.forEach(function(hp){
+  seen[hp.slug]=true;
+  batch.set(ref.doc(hp.slug),{title:hp.title||"",state:hp.state||null,link:hp.link||"",when:hp.when||"",updatedAt:stamp});
+ });
+ Object.keys(fbCloudSlugs).forEach(function(slug){if(!seen[slug]){batch.delete(ref.doc(slug));delete fbCloudSlugs[slug];}});
+ hosted.forEach(function(hp){fbCloudSlugs[hp.slug]=true;});
+ batch.commit().then(function(){fbSyncErrShown=false;}).catch(function(){
+  if(!fbSyncErrShown){fbSyncErrShown=true;
+   toast("Your pages could not be saved to your account just now — they are safe in this browser and saving retries on the next change. A page with a very large image can exceed Firestore's 1 MB per-page limit","error");}
+ });
+}
+
+/* ---------- friendly error messages (never raw Firebase codes) ---------- */
+function fbFriendly(err){
+ var code=(err&&err.code)||"";
+ var map={
+  "auth/invalid-email":"That email address does not look valid. Check it and try again.",
+  "auth/user-not-found":"No account was found for that email. Check the email — or register a new account instead.",
+  "auth/wrong-password":"That password is not correct for this account. Try again.",
+  "auth/invalid-credential":"Those sign-in details do not match an account. Check the email and password, then try again.",
+  "auth/invalid-login-credentials":"Those sign-in details do not match an account. Check the email and password, then try again.",
+  "auth/email-already-in-use":"An account with this email already exists. Switch to Login and sign in with it.",
+  "auth/weak-password":"That password is too weak. Use at least 6 characters.",
+  "auth/user-disabled":"This account has been disabled. Please contact the site owner.",
+  "auth/too-many-requests":"Too many attempts in a row. Please wait a little while, then try again.",
+  "auth/network-request-failed":"Network problem — check your internet connection and try again.",
+  "auth/operation-not-allowed":"Email and password sign-in is not switched on in the Firebase project yet. The site owner needs to enable it: Firebase console → Authentication → Sign-in method → Email/Password.",
+  "auth/invalid-api-key":"The Firebase config saved in this browser looks wrong. Open Firebase Settings and paste the project's web config again.",
+  "auth/configuration-not-found":"The Firebase config saved in this browser looks wrong. Open Firebase Settings and paste the project's web config again.",
+  "auth/app-not-authorized":"This site's address is not authorised in the Firebase project. The site owner needs to add this domain: Firebase console → Authentication → Settings → Authorised domains."
+ };
+ return map[code]||"Something went wrong while contacting Firebase. Check your connection and try again.";
+}
+
+/* ---------- modals ---------- */
+function pcOpenModal(id){document.getElementById(id).classList.add("show");}
+function pcCloseModal(id){document.getElementById(id).classList.remove("show");}
+function pcAuthMsg(kind,title,body){
+ var m=document.getElementById("authMsg");if(!m)return;
+ if(!kind){m.innerHTML="";return;}
+ m.innerHTML='<div class="aiErr '+kind+'"><b>'+esc(title)+"</b>"+esc(body)+"</div>";
+}
+function pcAuthOpen(mode){
+ if(!fbLoadConfig()){pcOpenModal("fbSetupModal");return;}
+ pcAuthSetMode(mode||"login");pcAuthMsg("");
+ pcOpenModal("authModal");
+ fbInit().then(function(ok){
+  if(!ok)pcAuthMsg("net","Firebase could not be reached","Check your internet connection and try again — the sign-in service has to load before Login and Register can work.");
+ });
+}
+function pcAuthSetMode(mode){
+ fbAuthMode=mode;
+ var reg=(mode==="register");
+ document.getElementById("authTabLogin").classList.toggle("active",!reg);
+ document.getElementById("authTabRegister").classList.toggle("active",reg);
+ document.getElementById("authNameWrap").style.display=reg?"":"none";
+ document.getElementById("authPassNote").style.display=reg?"":"none";
+ document.getElementById("authTitle").textContent=reg?"Create your account":"Welcome back";
+ document.getElementById("authSub").textContent=reg?"Register once, then your pages follow you to any device.":"Log in to see your pages on any device. New here? Register a free account.";
+ document.getElementById("authSubmitBtn").textContent=reg?"Register":"Login";
+ document.getElementById("authPass").setAttribute("autocomplete",reg?"new-password":"current-password");
+ pcAuthMsg("");
+}
+function pcAuthBusy(on){
+ var b=document.getElementById("authSubmitBtn");if(!b)return;
+ b.disabled=on;b.textContent=on?"Please wait…":(fbAuthMode==="register"?"Register":"Login");
+}
+function pcAuthSubmit(ev){
+ if(ev)ev.preventDefault();
+ var name=(document.getElementById("authName").value||"").trim();
+ var email=(document.getElementById("authEmail").value||"").trim();
+ var pass=document.getElementById("authPass").value||"";
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){pcAuthMsg("net","Check your email","That email address does not look complete. Type the full address, like you@example.com.");return false;}
+ if(fbAuthMode==="register"&&!name){pcAuthMsg("net","Add your name","Type your name so your account — and your pages — carry it.");return false;}
+ if(pass.length<6){pcAuthMsg("net","Password is too short","Use at least 6 characters for the password.");return false;}
+ pcAuthMsg("");pcAuthBusy(true);
+ fbInit().then(function(ok){
+  if(!ok||!fbAuth){pcAuthBusy(false);pcAuthMsg("net","Firebase could not be reached","Check your internet connection and try again.");return;}
+  if(fbAuthMode==="register"){
+   fbAuth.createUserWithEmailAndPassword(email,pass).then(function(cred){
+    var after=function(){
+     pcAuthBusy(false);pcCloseModal("authModal");
+     toast("Account created — welcome, "+name);
+    };
+    var prof=cred.user.updateProfile({displayName:name}).catch(function(){});
+    var doc=fbDb.collection("users").doc(cred.user.uid).set({name:name,email:email,createdAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(function(){});
+    Promise.all([prof,doc]).then(after,after);
+   }).catch(function(err){pcAuthBusy(false);pcAuthMsg("net","Could not register",fbFriendly(err));});
+  }else{
+   fbAuth.signInWithEmailAndPassword(email,pass).then(function(){
+    pcAuthBusy(false);pcCloseModal("authModal");
+    toast("Welcome back — you are logged in");
+   }).catch(function(err){pcAuthBusy(false);pcAuthMsg("net","Could not log you in",fbFriendly(err));});
+  }
+ });
+ return false;
+}
+function pcAuthLogout(){
+ if(!fbAuth)return;
+ fbAuth.signOut().then(function(){
+  toast("Logged out — pages saved to your account stay there; this browser keeps working locally");
+ }).catch(function(){toast("Logout did not complete — check your connection and try again","error");});
+}
+
+/* ---------- Firebase Settings ---------- */
+function pcFbMsg(kind,title,body){
+ var m=document.getElementById("fbSettingsMsg");if(!m)return;
+ if(!kind){m.innerHTML="";return;}
+ m.innerHTML='<div class="aiErr '+kind+'"><b>'+esc(title)+"</b>"+esc(body)+"</div>";
+}
+function fbSettingsStatus(){
+ var el=document.getElementById("fbStatus");if(!el)return;
+ if(fbConfig){
+  el.innerHTML="<b>Connected in this browser</b> — Firebase project <b>"+esc(fbConfig.projectId)+"</b>"+(fbUser?". Signed in as <b>"+esc(fbUser.displayName||fbUser.email)+"</b>.":". Nobody is signed in right now.");
+ }else{
+  el.innerHTML="<b>Not connected yet.</b> Paste your Firebase web config below and press Save &amp; Connect — Login, Register and account-saved pages start working immediately.";
+ }
+ var rb=document.getElementById("fbRemoveBtn");if(rb)rb.style.display=fbConfig?"":"none";
+}
+function pcFbSettingsOpen(){
+ var c=fbLoadConfig()||{};
+ var set=function(id,v){var el=document.getElementById(id);if(el)el.value=v||"";};
+ set("fbApiKey",c.apiKey);set("fbAuthDomain",c.authDomain);set("fbProjectId",c.projectId);
+ set("fbBucket",c.storageBucket);set("fbSender",c.messagingSenderId);set("fbAppId",c.appId);
+ set("fbPaste","");
+ pcFbMsg("");fbSettingsStatus();
+ pcOpenModal("fbSettingsModal");
+}
+function fbParseConfigText(txt){
+ var out={};
+ if(!txt)return out;
+ try{var j=JSON.parse(txt);if(j&&typeof j==="object"&&!Array.isArray(j))out=j;}catch(e){}
+ ["apiKey","authDomain","projectId","storageBucket","messagingSenderId","appId"].forEach(function(k){
+  if(out[k])return;
+  var m=String(txt).match(new RegExp(k+"\\s*[:=]\\s*[\"']([^\"']+)[\"']"));
+  if(m)out[k]=m[1];
+ });
+ return out;
+}
+function pcFbParsePaste(){
+ var c=fbParseConfigText(document.getElementById("fbPaste").value||"");
+ var set=function(id,v){if(v)document.getElementById(id).value=v;};
+ set("fbApiKey",c.apiKey);set("fbAuthDomain",c.authDomain);set("fbProjectId",c.projectId);
+ set("fbBucket",c.storageBucket);set("fbSender",c.messagingSenderId);set("fbAppId",c.appId);
+ if(c.apiKey&&c.projectId)pcFbMsg("ok","Config read","The fields below are filled from your paste. Check them, then press Save & Connect.");
+ else pcFbMsg("setup","That paste could not be read","Paste the whole firebaseConfig block from the Firebase console — it starts with const firebaseConfig = { … } — or fill the fields in by hand.");
+}
+function fbResetApp(done){
+ var finish=function(){fbApp=null;fbAuth=null;fbDb=null;fbUser=null;fbCloudReady=false;fbCloudSlugs={};fbRenderAuth();done&&done();};
+ if(fbAuth&&fbUser){fbAuth.signOut().catch(function(){});}
+ if(fbApp&&fbApp.delete){fbApp.delete().then(finish,finish);}
+ else finish();
+}
+function pcFbSaveSettings(){
+ var get=function(id){return (document.getElementById(id).value||"").trim();};
+ var c={apiKey:get("fbApiKey"),authDomain:get("fbAuthDomain"),projectId:get("fbProjectId"),
+        storageBucket:get("fbBucket"),messagingSenderId:get("fbSender"),appId:get("fbAppId")};
+ if(!c.apiKey||!c.authDomain||!c.projectId||!c.appId){
+  pcFbMsg("setup","A few fields are missing","API key, Auth domain, Project ID and App ID are all required — they are the four values Firebase shows for every web app.");return;
+ }
+ var btn=document.getElementById("fbSaveBtn");btn.disabled=true;btn.textContent="Connecting…";
+ var proceed=function(){
+  fbStoreConfig(c);fbConfig=c;
+  fbInit().then(function(ok){
+   btn.disabled=false;btn.textContent="Save & Connect";
+   if(ok){pcCloseModal("fbSettingsModal");fbSettingsStatus();toast("Firebase connected — project "+c.projectId+". Login and Register are ready");}
+   else{pcFbMsg("net","Config saved, but Firebase could not be reached","The config is kept in this browser. Check your internet connection, then press Login — it will connect as soon as the network is back.");}
+  });
+ };
+ if(fbApp)fbResetApp(proceed);else proceed();
+}
+function pcFbRemoveSettings(){
+ var proceed=function(){
+  fbDropConfig();fbConfig=null;fbSettingsStatus();pcFbMsg("");
+  pcCloseModal("fbSettingsModal");
+  toast("Firebase config removed from this browser — accounts are off; local work continues as before");
+ };
+ if(fbApp)fbResetApp(proceed);else{fbUser=null;fbRenderAuth();proceed();}
+}
+
+/* ---------- boot ---------- */
+["authModal","fbSetupModal","fbSettingsModal"].forEach(function(id){
+ var o=document.getElementById(id);
+ if(o)o.addEventListener("click",function(e){if(e.target===o)pcCloseModal(id);});
+});
+document.addEventListener("keydown",function(e){
+ if(e.key==="Escape")["authModal","fbSetupModal","fbSettingsModal"].forEach(pcCloseModal);
+});
+fbConfig=fbLoadConfig();
+fbRenderAuth();
+if(fbConfig)fbInit();
 </script>
 <script>(function(){var m=document.getElementById("tutVideo");if(!m)return;var src=m.getAttribute("src");if(!src)return;document.querySelectorAll('video[preload="none"]').forEach(function(v){if(!v.getAttribute("src")){v.src=src;}});})();</script></body>
 </html>
