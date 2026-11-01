@@ -26,12 +26,30 @@ async function callGemini(model, apiKey, prompt) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: system + '\n\nUser request:\n' + prompt }] }],
-        generationConfig: { temperature: 0.7 }
+        generationConfig: { temperature: 0.7, responseMimeType: 'application/json' }
       })
     }
   );
   var data = await r.json().catch(function () { return {}; });
   return { status: r.status, data: data };
+}
+
+// Ask Google which models this key can actually use, so a retired
+// model name can never break the feature again.
+async function listUsableModels(apiKey) {
+  try {
+    var r = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(apiKey) + '&pageSize=100'
+    );
+    var data = await r.json().catch(function () { return {}; });
+    var names = (data.models || [])
+      .filter(function (m) { return (m.supportedGenerationMethods || []).indexOf('generateContent') >= 0; })
+      .map(function (m) { return String(m.name || '').replace(/^models\//, ''); });
+    // Prefer fast flash-class models, then anything else that generates.
+    var flash = names.filter(function (n) { return /flash/i.test(n); });
+    var rest = names.filter(function (n) { return !/flash/i.test(n); });
+    return flash.concat(rest);
+  } catch (e) { return []; }
 }
 
 module.exports = async function handler(req, res) {
@@ -54,22 +72,21 @@ module.exports = async function handler(req, res) {
     return;
   }
   try {
-    // Try the current model first, fall back to the widely available one.
-    var models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+    var discovered = await listUsableModels(apiKey);
+    var models = discovered.length ? discovered.slice(0, 4)
+      : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash-lite'];
     var lastErr = null;
     for (var i = 0; i < models.length; i++) {
       var result = await callGemini(models[i], apiKey, prompt);
       var data = result.data || {};
-      // Surface real upstream errors instead of masking them.
       if (data.error) {
         var msg = (data.error.message || '').toString();
         if (/API key not valid|API_KEY_INVALID|unauthenticated/i.test(msg) || result.status === 401 || result.status === 403) {
           res.status(502).json({ error: 'invalid_key', detail: 'Gemini rejected the API key. Check the GEMINI_API_KEY value in Vercel.' });
           return;
         }
-        if (result.status === 404) { lastErr = data.error; continue; }
-        res.status(502).json({ error: 'upstream_error', detail: msg.slice(0, 200) });
-        return;
+        lastErr = data.error;
+        continue; // try the next model (e.g. retired model name)
       }
       var text = '';
       try {
