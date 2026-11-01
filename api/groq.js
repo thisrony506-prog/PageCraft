@@ -36,6 +36,19 @@ async function callGroq(model, apiKey, prompt) {
   return { status: r.status, data: data };
 }
 
+async function listUsableModels(apiKey) {
+  try {
+    var r = await fetch('https://api.groq.com/openai/v1/models', {
+      headers: { 'Authorization': 'Bearer ' + apiKey }
+    });
+    var data = await r.json().catch(function () { return {}; });
+    var ids = (data.data || []).map(function (m) { return m.id; }).filter(Boolean);
+    var prefer = ids.filter(function (id) { return /llama-3|gpt-oss|kimi|qwen3/i.test(id); });
+    var rest = ids.filter(function (id) { return !/llama-3|gpt-oss|kimi|qwen3/i.test(id); });
+    return prefer.concat(rest);
+  } catch (e) { return []; }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'method_not_allowed' });
@@ -56,7 +69,9 @@ module.exports = async function handler(req, res) {
     return;
   }
   try {
-    var models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+    var discovered = await listUsableModels(apiKey);
+    var models = discovered.length ? discovered.slice(0, 4)
+      : ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile', 'moonshotai/kimi-k2-instruct', 'qwen/qwen3-32b'];
     var lastErr = null;
     for (var i = 0; i < models.length; i++) {
       var result = await callGroq(models[i], apiKey, prompt);
