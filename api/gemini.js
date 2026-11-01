@@ -81,6 +81,10 @@ module.exports = async function handler(req, res) {
       var data = result.data || {};
       if (data.error) {
         var msg = (data.error.message || '').toString();
+        if (/has not been used|not been enabled|API has not been enabled|SERVICE_DISABLED/i.test(msg)) {
+          res.status(502).json({ error: 'api_not_enabled', detail: 'The Gemini API is not enabled for this key\'s Google Cloud project. Enable the Generative Language API, then redeploy.' });
+          return;
+        }
         if (/API key not valid|API_KEY_INVALID|unauthenticated/i.test(msg) || result.status === 401 || result.status === 403) {
           res.status(502).json({ error: 'invalid_key', detail: 'Gemini rejected the API key. Check the GEMINI_API_KEY value in Vercel.' });
           return;
