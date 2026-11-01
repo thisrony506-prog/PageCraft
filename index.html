@@ -586,6 +586,20 @@ button,a,input,select,textarea,label{touch-action:manipulation}
 .aiExamples{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 4px}
 .aiExamples button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:38px}
 .aiExamples button:hover{border-color:var(--ink)}
+.aiExamples button.sel{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.aiSuggHead{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:14px 0 2px;color:var(--ink)}
+.aiSuggHead:first-child{margin-top:2px}
+.aiSuggIntro{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+.aiSuggGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 4px}
+@media(max-width:480px){.aiSuggGrid{grid-template-columns:1fr 1fr}}
+.aiSuggGrid button{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:11px 12px;text-align:left;cursor:pointer;min-height:52px;display:flex;flex-direction:column;gap:2px;justify-content:center}
+.aiSuggGrid button:hover{border-color:var(--ink)}
+.aiSuggGrid button.sel{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.aiSuggGrid button.sel span{color:var(--bg);opacity:.85}
+.aiSuggGrid button b{font-size:13.5px;line-height:1.25}
+.aiSuggGrid button span{font-size:11.5px;color:var(--muted);line-height:1.35}
+.aiOwnNote{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+.aiOwnNote b{color:var(--ink)}
 .aiHomePanel .btn{width:100%;margin-top:10px}
 .aiHomeNote{font-size:12.5px;color:var(--muted);line-height:1.55;margin:12px 0 0}
 /* --- Home tutorial strip --- */
@@ -720,20 +734,28 @@ button,a,input,select,textarea,label{touch-action:manipulation}
           <h2>Describe it — AI builds the page for you</h2>
           <p>No blank-page stress. Tell the AI what your page is about and it drafts the headline, description, button, theme colour and feature cards — straight into the builder, ready for you to fine-tune, add ads and publish. AI follows your description strictly: it builds only what you describe and adds nothing extra — no invented features, sections or claims.</p>
           <ol class="aiSteps">
-            <li><b>1</b><span><b>Describe your page</b> — what it sells or offers, who it is for, and what the button should do.</span></li>
+            <li><b>1</b><span><b>Pick a ready prompt or describe your page</b> — tap a suggestion for a restaurant, portfolio, shop, gym, salon, course, event or service business and it fills the box for you, or write your own: what it sells or offers, who it is for, and what the button should do.</span></li>
             <li><b>2</b><span><b>AI drafts it in the builder</b> — only what your description asks for: headline, text, button and theme colour, applied to the live preview. Feature cards are made only if your description mentions features — if it doesn't, none are added.</span></li>
             <li><b>3</b><span><b>Fine-tune &amp; publish</b> — change anything, add ad codes in the Ads tab, then publish with a public link.</span></li>
           </ol>
           <div class="aiPts"><span>Headline &amp; text written for you</span><span>Colour &amp; features included</span><span>Everything stays editable</span><span>Free to try</span></div>
         </div>
         <div class="aiHomePanel">
-          <label for="homeAiPrompt">What page do you want?</label>
-          <textarea id="homeAiPrompt" placeholder="e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
-          <div class="aiExamples" aria-label="Example descriptions">
-            <button onclick="homeAiExample('A landing page for a home bakery selling custom birthday cakes, friendly tone, order on WhatsApp')">Bakery page</button>
-            <button onclick="homeAiExample('A portfolio page for a freelance graphic designer with branding and social media work, hire-me button')">Portfolio page</button>
-            <button onclick="homeAiExample('A product page for wireless earbuds with a discount offer, cash on delivery, order now button')">Online shop page</button>
+          <p class="aiSuggHead">Ready prompt suggestions — tap one to use it</p>
+          <p class="aiSuggIntro">Not sure what to write? Tap a suggestion below and a complete, ready-to-use prompt fills the description box for you. You can edit it, or press Generate straight away.</p>
+          <div class="aiSuggGrid" aria-label="Ready prompt suggestions">
+            <button type="button" onclick="homeAiExample(this,'A landing page for a family restaurant in Dhaka serving biryani, kebabs and fresh juices, warm friendly tone, features are home delivery, family seating and a todays special menu, button says Book a Table')"><b>Restaurant</b><span>Menu, delivery &amp; table booking</span></button>
+            <button type="button" onclick="homeAiExample(this,'A portfolio landing page for a freelance graphic designer showing branding, logo and social media design work, clean professional tone, features are 5 years of experience, 120 plus projects delivered and fast delivery, button says Hire Me')"><b>Portfolio</b><span>Show your work &amp; get hired</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for an online shop selling fashion and accessories for women with cash on delivery, features are free delivery inside Dhaka, easy 7-day returns and new arrivals every week, button says Shop Now')"><b>Shop</b><span>Products, offers &amp; orders</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for a modern gym and fitness centre, energetic tone, features are personal training, cardio and strength zones and a free first trial session, button says Join Now')"><b>Gym</b><span>Training plans &amp; membership</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for a beauty salon for women offering haircuts, facials and bridal makeup, elegant friendly tone, features are expert stylists, branded products and easy appointment booking, button says Book Appointment')"><b>Salon</b><span>Services &amp; appointments</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for an online English speaking course for beginners, friendly encouraging tone, features are live classes on Zoom, daily speaking practice and a certificate on completion, button says Enroll Now')"><b>Course</b><span>Lessons, classes &amp; enrolment</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for a one-day food festival event in Dhaka with live music and 40 food stalls, exciting tone, features are early-bird tickets, family entry and parking, button says Get Tickets')"><b>Event</b><span>Tickets &amp; event details</span></button>
+            <button type="button" onclick="homeAiExample(this,'A landing page for a home cleaning and plumbing service business, trustworthy tone, features are same-day service, trained and verified staff and a 30-day service guarantee, button says Book a Service')"><b>Service Business</b><span>Local services &amp; booking</span></button>
           </div>
+          <label for="homeAiPrompt">Your description — a suggestion, or write your own</label>
+          <textarea id="homeAiPrompt" placeholder="Tap a suggestion above, or write your own — e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
+          <p class="aiOwnNote"><b>Write your own:</b> say what the page offers, who it is for, which features to show, and what the button should say.</p>
           <button class="btn" onclick="homeAiGenerate()">Generate My Page with AI</button>
           <button class="btn outline" onclick="openBuilder('blank');setTimeout(function(){switchTab('ai')},60)">Open AI in the Builder</button>
           <p class="aiHomeNote">The Assistant is built into PageCraft — no key is ever asked from you; just describe and build. You can also ask the Assistant to <b>edit</b> a page you already made: open the builder, go to the AI tab, and describe the change.</p>
@@ -1051,11 +1073,31 @@ button,a,input,select,textarea,label{touch-action:manipulation}
       <div class="tabPane" id="tab-ai">
         <h3 style="margin-top:4px">Build &amp; edit with AI</h3>
         <p style="color:var(--muted);font-size:14px">Describe what you want and PageCraft's built-in Assistant drafts the page for you — headline, text, button, colour and feature cards — straight into this builder, ready to fine-tune. The Assistant is part of this website: it just works, and no key is ever asked from you. <b>Strict rule:</b> the Assistant does exactly what you describe and nothing more — it builds only what you ask for and never invents extra features, sections, buttons or information that is not in your description. The same rule applies to the home-page AI builder. If an answer ever comes back empty, the Assistant automatically tries once more before telling you.</p>
-        <label>Create a new page with AI</label>
-        <textarea id="aiPrompt" placeholder="e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
+        <p class="aiSuggHead">Ready prompt suggestions — tap one to use it</p>
+        <p class="aiSuggIntro">Tap a suggestion and a complete, ready-to-use prompt fills the description box below. Edit it to match your business, or use it as it is.</p>
+        <div class="aiSuggGrid" aria-label="Ready prompt suggestions for a new page">
+          <button type="button" onclick="aiPromptExample(this,'A landing page for a family restaurant in Dhaka serving biryani, kebabs and fresh juices, warm friendly tone, features are home delivery, family seating and a todays special menu, button says Book a Table')"><b>Restaurant</b><span>Menu, delivery &amp; table booking</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A portfolio landing page for a freelance graphic designer showing branding, logo and social media design work, clean professional tone, features are 5 years of experience, 120 plus projects delivered and fast delivery, button says Hire Me')"><b>Portfolio</b><span>Show your work &amp; get hired</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for an online shop selling fashion and accessories for women with cash on delivery, features are free delivery inside Dhaka, easy 7-day returns and new arrivals every week, button says Shop Now')"><b>Shop</b><span>Products, offers &amp; orders</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for a modern gym and fitness centre, energetic tone, features are personal training, cardio and strength zones and a free first trial session, button says Join Now')"><b>Gym</b><span>Training plans &amp; membership</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for a beauty salon for women offering haircuts, facials and bridal makeup, elegant friendly tone, features are expert stylists, branded products and easy appointment booking, button says Book Appointment')"><b>Salon</b><span>Services &amp; appointments</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for an online English speaking course for beginners, friendly encouraging tone, features are live classes on Zoom, daily speaking practice and a certificate on completion, button says Enroll Now')"><b>Course</b><span>Lessons, classes &amp; enrolment</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for a one-day food festival event in Dhaka with live music and 40 food stalls, exciting tone, features are early-bird tickets, family entry and parking, button says Get Tickets')"><b>Event</b><span>Tickets &amp; event details</span></button>
+          <button type="button" onclick="aiPromptExample(this,'A landing page for a home cleaning and plumbing service business, trustworthy tone, features are same-day service, trained and verified staff and a 30-day service guarantee, button says Book a Service')"><b>Service Business</b><span>Local services &amp; booking</span></button>
+        </div>
+        <label for="aiPrompt">Create a new page with AI — your description</label>
+        <textarea id="aiPrompt" placeholder="Tap a suggestion above, or write your own — e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
+        <p class="aiOwnNote"><b>Write your own:</b> say what the page offers, who it is for, which features to show, and what the button should say.</p>
         <button class="btn" style="width:100%;margin-top:10px" id="aiGenBtn" onclick="aiGenerate()">Generate Page with AI</button>
         <button class="btn outline" style="width:100%;margin-top:8px" id="aiCheckBtn" onclick="aiCheck()">Check AI Status</button>
         <label style="margin-top:20px">Or edit this page with AI</label>
+        <p class="aiSuggIntro" style="margin-bottom:6px">Tap an edit idea to fill the box, or write your own change below.</p>
+        <div class="aiExamples" aria-label="Ready edit prompt suggestions">
+          <button type="button" onclick="aiEditExample(this,'Make the headline shorter and punchier, keep everything else the same')">Shorter headline</button>
+          <button type="button" onclick="aiEditExample(this,'Rewrite the description in a friendlier tone for young customers, keep the headline and button the same')">Friendlier tone</button>
+          <button type="button" onclick="aiEditExample(this,'Rewrite the feature cards to focus on price, quality and fast delivery, keep everything else the same')">Rewrite features</button>
+          <button type="button" onclick="aiEditExample(this,'Change the button text to Order Now and make the description mention cash on delivery, keep everything else the same')">Order Now button</button>
+        </div>
         <textarea id="aiEditPrompt" placeholder="e.g. Make the headline punchier, shorten the description, and rewrite the features for students"></textarea>
         <button class="btn outline" style="width:100%;margin-top:10px" id="aiEditBtn" onclick="aiEdit()">Apply AI Edit to This Page</button>
         <div id="aiStatus" style="margin-top:12px"></div>
@@ -1253,6 +1295,19 @@ function aiExtractText(data){
  if(typeof data.text==="string")return data.text;
  if(typeof data.result==="string")return data.result;
  try{var ch=data.choices&&data.choices[0];if(ch&&ch.message&&typeof ch.message.content==="string")return ch.message.content;if(ch&&typeof ch.text==="string")return ch.text;}catch(e){}
+ /* The server sometimes answers with the page JSON itself — headline, sub,
+    buttonText, color, features — instead of wrapping the reply in a text
+    field. That is the answer, not an empty one: hand it on as a JSON string
+    so the page parser can read it. The server calls the hero button
+    "buttonText"; this page calls it "ctaText", so map it across so the
+    button wording actually lands in the preview. */
+ if(typeof data.headline==="string"||typeof data.sub==="string"){
+   try{
+     var page=data;
+     if(typeof page.ctaText!=="string"&&typeof page.buttonText==="string"){page=Object.assign({},page,{ctaText:page.buttonText});}
+     return JSON.stringify(page);
+   }catch(e){}
+ }
  return "";
 }
 function aiCall(promptText,done,retried){
@@ -2050,7 +2105,10 @@ function syncDtColors(){
 }
 
 /* --- AI from the home page --- */
-function homeAiExample(txt){var ta=document.getElementById("homeAiPrompt");if(ta){ta.value=txt;ta.focus();}}
+function pcMarkSugg(btn){if(!btn||!btn.parentNode)return;var sib=btn.parentNode.querySelectorAll("button");for(var i=0;i<sib.length;i++)sib[i].classList.remove("sel");btn.classList.add("sel");}
+function homeAiExample(btn,txt){if(typeof btn==="string"){txt=btn;btn=null;}var ta=document.getElementById("homeAiPrompt");if(ta){ta.value=txt;pcMarkSugg(btn);ta.focus();}}
+function aiPromptExample(btn,txt){if(typeof btn==="string"){txt=btn;btn=null;}var ta=document.getElementById("aiPrompt");if(ta){ta.value=txt;pcMarkSugg(btn);ta.focus();}}
+function aiEditExample(btn,txt){if(typeof btn==="string"){txt=btn;btn=null;}var ta=document.getElementById("aiEditPrompt");if(ta){ta.value=txt;pcMarkSugg(btn);ta.focus();}}
 function homeAiGenerate(){
  var ta=document.getElementById("homeAiPrompt");
  var p=((ta&&ta.value)||"").trim();
