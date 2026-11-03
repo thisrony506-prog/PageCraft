@@ -641,6 +641,7 @@ button,a,input,select,textarea,label{touch-action:manipulation}
 .tutCardBody p{margin:0 0 14px;color:var(--muted);font-size:13.5px;line-height:1.55;flex:1}
 .tutCardBody .btn{align-self:flex-start}
 /* --- Ads: unit picker hint --- */
+.adSelLbl{display:block;font-size:12px;font-weight:700;color:var(--ink);margin:9px 0 4px}
 .unitHint{font-size:12.5px;color:var(--muted);line-height:1.5;margin:7px 0 2px}
 .unitHint.warn{color:#7a4b00;background:#FFF4D6;border:1px solid #E5C15C;border-radius:8px;padding:8px 10px}
 @media (prefers-color-scheme: dark){.unitHint.warn{color:#FFD98A;background:#2A2105;border-color:#6b5518}}
@@ -975,6 +976,7 @@ input,textarea,select{transition:border-color .15s ease}
             <button type="button" onclick="homeAiExample(this,'A landing page for an online English speaking course for beginners, friendly encouraging tone, features are live classes on Zoom, daily speaking practice and a certificate on completion, button says Enroll Now')"><b>Course</b><span>Lessons, classes &amp; enrolment</span></button>
             <button type="button" onclick="homeAiExample(this,'A landing page for a one-day food festival event in Dhaka with live music and 40 food stalls, exciting tone, features are early-bird tickets, family entry and parking, button says Get Tickets')"><b>Event</b><span>Tickets &amp; event details</span></button>
             <button type="button" onclick="homeAiExample(this,'A landing page for a home cleaning and plumbing service business, trustworthy tone, features are same-day service, trained and verified staff and a 30-day service guarantee, button says Book a Service')"><b>Service Business</b><span>Local services &amp; booking</span></button>
+            <button type="button" onclick="homeAiExample(this,'A high-click marketing landing page for a free movies and downloads site that earns from ads, bold energetic tone, features are instant access with no sign up, new content added daily, works on any phone and fast safe downloads, button says Continue')"><b>Ad Money Page</b><span>Earn from Adsterra / Monetag ads</span></button>
           </div>
           <label for="homeAiPrompt">Your description — a suggestion, or write your own</label>
           <textarea id="homeAiPrompt" placeholder="Tap a suggestion above, or write your own — e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
@@ -1261,6 +1263,24 @@ input,textarea,select{transition:border-color .15s ease}
         </div>
         <h3 style="margin:20px 0 2px;font-size:16px">Ad slots — fixed positions on every page</h3>
         <p style="color:var(--muted);font-size:13px;margin:0">Pick the slot that matches the place you want — Popunder, Top Banner, In-Content, Native, Social Bar or Sticky Footer — then paste that unit's full code into it.</p>
+        <div class="slotMap" style="margin:14px 0 4px">
+          <div><b>Popunder</b><span>Opens once behind the page when a visitor arrives — one code covers the whole page.</span></div>
+          <div><b>Top Banner</b><span>The banner across the very top of the page — the first thing every visitor sees.</span></div>
+          <div><b>In-Content</b><span>Inside the content, right after the headline and intro — very high attention.</span></div>
+          <div><b>Native</b><span>After the feature cards, blended in so it looks like part of the page.</span></div>
+          <div><b>Social Bar</b><span>A floating bar that follows the visitor — strong clicks from any position.</span></div>
+          <div><b>Sticky Footer</b><span>Stuck to the bottom of the screen while scrolling — always visible.</span></div>
+        </div>
+        <div class="hideAdCard">
+          <h4>One-tap network setup — set every slot at once</h4>
+          <p>Running one network across the whole page? Tap it once and every slot below is set to that network, <b>each with the correct unit for its position</b>. Codes you already pasted stay untouched — afterwards, just paste each unit's code into its slot.</p>
+          <div class="adPosRow">
+            <button class="btn" onclick="applyNetworkToAll('Adsterra')">All slots: Adsterra</button>
+            <button class="btn" onclick="applyNetworkToAll('Monetag')">All slots: Monetag</button>
+            <button class="btn outline" onclick="applyNetworkToAll('PropellerAds')">All slots: PropellerAds</button>
+            <button class="btn outline" onclick="applyNetworkToAll('Google AdSense')">All slots: AdSense</button>
+          </div>
+        </div>
         <div id="adSlots"></div>
         <div class="seg"><button id="adPreviewBtn" class="active" onclick="toggleAdPreview()">Ad placeholders: ON</button></div>
         <div class="hideAdCard">
@@ -1317,6 +1337,7 @@ input,textarea,select{transition:border-color .15s ease}
           <button type="button" onclick="aiPromptExample(this,'A landing page for an online English speaking course for beginners, friendly encouraging tone, features are live classes on Zoom, daily speaking practice and a certificate on completion, button says Enroll Now')"><b>Course</b><span>Lessons, classes &amp; enrolment</span></button>
           <button type="button" onclick="aiPromptExample(this,'A landing page for a one-day food festival event in Dhaka with live music and 40 food stalls, exciting tone, features are early-bird tickets, family entry and parking, button says Get Tickets')"><b>Event</b><span>Tickets &amp; event details</span></button>
           <button type="button" onclick="aiPromptExample(this,'A landing page for a home cleaning and plumbing service business, trustworthy tone, features are same-day service, trained and verified staff and a 30-day service guarantee, button says Book a Service')"><b>Service Business</b><span>Local services &amp; booking</span></button>
+            <button type="button" onclick="aiPromptExample(this,'A high-click marketing landing page for a free movies and downloads site that earns from ads, bold energetic tone, features are instant access with no sign up, new content added daily, works on any phone and fast safe downloads, button says Continue')"><b>Ad Money Page</b><span>Earn from Adsterra / Monetag ads</span></button>
         </div>
         <label for="aiPrompt">Create a new page with AI — your description</label>
         <textarea id="aiPrompt" placeholder="Tap a suggestion above, or write your own — e.g. A landing page for a home bakery in Dhaka selling custom birthday cakes, friendly tone, order on WhatsApp"></textarea>
@@ -1544,7 +1565,7 @@ function defaultUnitFor(network,key){
  if(key==="pop")u=find(/pop/i);
  else if(key==="social")u=find(/social|push/i);
  else if(key==="native")u=find(/native|multiplex/i);
- else if(key==="topbanner")u=find(/728/);
+ else if(key==="topbanner")u=find(/728/)||find(/300/)||find(/banner/i);
  else if(key==="incontent")u=find(/300×250|in-article/i);
  else if(key==="sticky")u=find(/320×50/i);
  return u||list[0];
@@ -1890,8 +1911,10 @@ function renderBlocks(){
 var editIdx=-1;
 function editBlock(i){editIdx=i;var b=state.blocks[i];var el=document.getElementById("blockEdit");
  if(b.type==="ad"){el.innerHTML='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:10px"><label>Custom Ad block '+(i+1)+'</label><p style="color:var(--muted);font-size:13px;margin:0 0 10px">This ad\'s code, internal name and on/off switch live in the Ads tab now, together with the fixed slots and every other ad on this page — all ad work in one place. Its position in your content is still set here with Up / Down, in the Ads tab list, or by dragging in Drag Mode.</p><button class="btn" style="padding:9px 14px" onclick="switchTab(\'ads\');adsEditCustom('+i+')">Edit This Ad in the Ads Tab</button></div>';return;}
- el.innerHTML='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:4px"><label>Editing block '+(i+1)+' — '+b.type+'</label>'+(b.type!=="text"?'<label>Title / Label</label><input type="text" value="'+esc(b.title||b.label||"")+'" oninput="blockUpd(\'title\',this.value)">':'')+'<label>Text</label><textarea oninput="blockUpd(\'text\',this.value)">'+esc(b.text||"")+'</textarea>'+(b.type==="button"?'<label>Button link</label><input type="url" value="'+esc(b.url||"#")+'" oninput="blockUpd(\'url\',this.value)">':'')+'</div>';}
+ el.innerHTML='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:4px"><label>Editing block '+(i+1)+' — '+b.type+'</label>'+(b.type!=="text"?'<label>Title / Label</label><input type="text" value="'+esc(b.title||b.label||"")+'" oninput="blockUpd(\'title\',this.value)">':'')+'<label>Text</label><textarea oninput="blockUpd(\'text\',this.value)">'+esc(b.text||"")+'</textarea>'+(b.type==="button"?'<label>Button link</label><input type="url" value="'+esc(b.url||"#")+'" oninput="blockUpd(\'url\',this.value)">'+'<label>Button colour — your own, or the page theme</label><div class="colorRow"><input type="color" value="'+(b.bg||state.color)+'" oninput="blockColor(\'bg\',this.value)"><span>'+(b.bg?b.bg:"Theme colour")+'</span>'+(b.bg?'<button class="iconBtn" onclick="blockColorReset(\'bg\')">Use theme</button>':'')+'</div>'+'<label>Button text colour</label><div class="colorRow"><input type="color" value="'+(b.color||"#FFFFFF")+'" oninput="blockColor(\'color\',this.value)"><span>'+(b.color?b.color:"White (default)")+'</span>'+(b.color?'<button class="iconBtn" onclick="blockColorReset(\'color\')">Reset</button>':'')+'</div>':'')+'</div>';}
 function blockToggleAd(){if(editIdx<0)return;var b=state.blocks[editIdx];b.enabled=!(b.enabled!==false);editBlock(editIdx);renderBlocks();renderPreview();renderCustomAdList();}
+function blockColor(k,v){if(editIdx<0||!state.blocks[editIdx])return;state.blocks[editIdx][k]=v;renderPreview();}
+function blockColorReset(k){blockColor(k,"");editBlock(editIdx);}
 function blockUpd(k,v){if(editIdx<0)return;var b=state.blocks[editIdx];if(k==="title"){b.title=v;b.label=v;}else{b[k]=v;}renderBlocks();renderPreview();if(b.type==="ad")renderCustomAdList();}
 function delBlock(i){state.blocks.splice(i,1);editIdx=-1;document.getElementById("blockEdit").innerHTML="";renderBlocks();renderPreview();renderCustomAdList();}
 function moveBlock(i,d){var j=i+d;if(j<0||j>=state.blocks.length)return;var t=state.blocks[i];state.blocks[i]=state.blocks[j];state.blocks[j]=t;renderBlocks();renderPreview();renderCustomAdList();}
@@ -1912,9 +1935,9 @@ function renderAdSlots(){
  var box=document.getElementById("adSlots");if(!box||!state)return;
  box.innerHTML=AD_SLOTS.map(function(sl){
   var a=adOf(state,sl.key);var has=!!a.code.trim();var en=a.enabled!==false;
-  return '<div class="adBox"><h4>'+sl.label+' <span class="status'+(has&&en?" on":"")+'" id="st-'+sl.key+'">'+(has?(en?"Code added":"Saved — slot OFF"):"Not added")+'</span></h4><p>'+sl.desc+' Paste the full HTML code for this position — it runs on the published live page only, never inside this builder preview.</p><textarea class="code" id="adcode-'+sl.key+'" placeholder="Paste the FULL ad code here, exactly as your network gives it — including every &lt;script&gt; tag…" oninput="updAd(\''+sl.key+'\',this.value)"></textarea><div class="valMsg" id="val-'+sl.key+'"></div><div class="adMeta"><button class="iconBtn" onclick="toggleAdSlot(\''+sl.key+'\')">'+(en?"Slot: ON":"Slot: OFF")+'</button><button class="iconBtn" onclick="clearAd(\''+sl.key+'\')">Clear code</button><span style="font-size:12px;color:var(--muted)" id="cc-'+sl.key+'"></span></div></div>';
+  return '<div class="adBox"><h4>'+sl.label+' <span class="status'+(has&&en?" on":"")+'" id="st-'+sl.key+'">'+(has?(en?"Code added":"Saved — slot OFF"):"Not added")+'</span></h4><p>'+sl.desc+' Paste the full HTML code for this position — it runs on the published live page only, never inside this builder preview.</p>'+'<label class="adSelLbl">Ad network</label><select onchange="updAdNetwork(\''+'+sl.key+'+'\',this.value)">'+adNetOptions(a)+'</select>'+'<label class="adSelLbl">Ad unit — the unit you created for this position</label><select onchange="updAdUnit(\''+'+sl.key+'+'\',this.value)">'+adUnitOptions(a)+'</select><p class="unitHint" id="uh-'+'+sl.key+'+'"></p>'+'<textarea class="code" id="adcode-'+sl.key+'" placeholder="Paste the FULL ad code here, exactly as your network gives it — including every &lt;script&gt; tag…" oninput="updAd(\''+sl.key+'\',this.value)"></textarea><div class="valMsg" id="val-'+sl.key+'"></div><div class="adMeta"><button class="iconBtn" onclick="toggleAdSlot(\''+sl.key+'\')">'+(en?"Slot: ON":"Slot: OFF")+'</button><button class="iconBtn" onclick="clearAd(\''+sl.key+'\')">Clear code</button><span style="font-size:12px;color:var(--muted)" id="cc-'+sl.key+'"></span></div></div>';
  }).join("");
- AD_SLOTS.forEach(function(sl){var a=adOf(state,sl.key);var ta=document.getElementById("adcode-"+sl.key);if(ta)ta.value=a.code;updAdMeta(sl.key);});
+ AD_SLOTS.forEach(function(sl){var a=adOf(state,sl.key);var ta=document.getElementById("adcode-"+sl.key);if(ta)ta.value=a.code;updAdMeta(sl.key);updAdUnitMeta(sl.key);});
  syncHideAdBtn();renderCustomAdList();
 }
 function updAdMeta(k){
@@ -1924,6 +1947,9 @@ function updAdMeta(k){
  vm.className="valMsg show "+(v.ok?"ok":"warn");vm.textContent=v.msg.replace(/&lt;/g,"<").replace(/&gt;/g,">");
  var st=document.getElementById("st-"+k);if(st){var en=a.enabled!==false;st.textContent=a.code.trim()?(en?"Code added":"Saved — slot OFF"):"Not added";st.classList.toggle("on",!!a.code.trim()&&en);}
 }
+function adNetOptions(a){return AD_NETWORKS.map(function(n){return '<option value="'+n+'"'+(a.network===n?" selected":"")+'>'+n+'</option>';}).join("");}
+function adUnitOptions(a){return (AD_UNITS[a.network]||["Custom / Any"]).map(function(u){return '<option value="'+u+'"'+(a.unit===u?" selected":"")+'>'+u+'</option>';}).join("");}
+function applyNetworkToAll(n){if(!state)return;AD_SLOTS.forEach(function(sl){var a=adOf(state,sl.key);a.network=n;a.unit=defaultUnitFor(n,sl.key);});if(typeof markDirty==="function")markDirty();renderAdSlots();renderPreview();toast("Every ad slot is now set to "+n+" — each with the right unit for its position. Now paste each unit's code into its slot.");}
 function updAdNetwork(k,v){var a=adOf(state,k);a.network=v;a.unit=defaultUnitFor(v,k);renderAdSlots();renderPreview();}
 function updAdUnit(k,v){adOf(state,k).unit=v;updAdUnitMeta(k);}
 function updAdUnitMeta(k){
@@ -2002,7 +2028,7 @@ function previewHTMLFor(s,devName,live){
    var pk="block-"+i,ps=pcPosStyle(s,devName,pk);
    if(b.type==="heading")return '<h2 data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="font-size:26px;margin:'+secGap+'px 0 6px'+ps+'">'+esc(b.title)+'</h2>';
    if(b.type==="text")return '<p data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="color:'+sub+';font-size:15.5px;max-width:680px'+ps+'">'+esc(b.text)+'</p>';
-   if(b.type==="button")return '<div data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="margin:14px 0'+ps+'"><a href="'+esc(b.url||"#")+'" style="display:inline-block;background:'+s.color+';color:#fff;padding:12px 22px;border-radius:'+s.radius+';font-weight:700;text-decoration:none;pointer-events:none">'+esc(b.label||b.title||"Click Here")+'</a></div>';
+   if(b.type==="button")return '<div data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="margin:14px 0'+ps+'"><a href="'+esc(b.url||"#")+'" style="display:inline-block;background:linear-gradient(135deg,'+(b.bg||s.color)+','+pcShade(b.bg||s.color,-18)+');color:'+(b.color||"#fff")+';padding:12px 22px;border-radius:'+s.radius+';font-weight:700;text-decoration:none;pointer-events:none">'+esc(b.label||b.title||"Click Here")+'</a></div>';
    if(b.type==="feature")return '<div data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="border:1px solid '+line+';border-radius:14px;padding:16px;margin:10px 0'+ps+'"><b style="font-size:16px">'+esc(b.title)+'</b><p style="color:'+sub+';margin:4px 0 0;font-size:14.5px">'+esc(b.text)+'</p></div>';
    if(b.type==="ad"){var hasAd=b.code&&b.code.trim()&&b.enabled!==false;if(live){if(!hasAd)return "";var lab2=(s.hideAdLabels===false)?'<div class="liveAdLabel">Advertisement</div>':"";return '<div style="'+ps+'">'+lab2+'<div class="liveAd" data-liveadblock="'+i+'" style="margin:14px auto;text-align:center"></div></div>';}if(!s.showAds)return "";return '<div data-inline="block" data-poskey="'+pk+'" data-idx="'+i+'" style="border:2px dashed '+(hasAd?"#000000":"#BBBBBB")+';background:'+(hasAd?"#F2F2F2":"#FAFAFA")+';color:#444444;border-radius:10px;padding:13px;text-align:center;font-size:12.5px;font-weight:700;margin:14px 0'+ps+'">CUSTOM AD — '+(s.hideAdLabels===false?esc(b.title||"Custom Ad"):"NAME HIDDEN")+'<br><span style="font-weight:400">'+(hasAd?"Code added — visitors see only the ad in this exact place":"No code yet — click to add code")+'</span></div>';}
    return "";}).join("");
