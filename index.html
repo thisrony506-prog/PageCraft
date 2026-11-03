@@ -853,6 +853,16 @@ h1,h2,h3{letter-spacing:-.02em}
 .feat:hover,.fHighlight:hover{border-color:rgba(124,58,237,.35)}
 .stat b{color:var(--accent-dark)}
 .aiHomePanel .btn{box-shadow:0 8px 20px rgba(109,40,217,.26)}
+.aiHome{margin:44px 0 10px}
+.aiHomeGrid{border:1px solid rgba(124,58,237,.32);border-radius:22px;padding:36px;background:linear-gradient(165deg,rgba(124,58,237,.055),rgba(79,70,229,.02) 55%,transparent),var(--surface);box-shadow:0 26px 60px rgba(76,29,149,.13)}
+@media(max-width:860px){.aiHomeGrid{padding:24px 18px}}
+.aiHomeGrid h2{font-size:clamp(31px,3.8vw,42px)}
+.aiHomeGrid p{font-size:16px}
+.aiHomePanel{padding:26px;border:1px solid rgba(124,58,237,.30);border-radius:20px;background:linear-gradient(170deg,rgba(124,58,237,.05),transparent 60%),var(--surface);box-shadow:0 24px 55px rgba(109,40,217,.16)}
+.aiHomePanel textarea{min-height:150px;font-size:16.5px;padding:14px;line-height:1.55}
+.aiHomePanel .btn{font-size:16.5px;padding:15px 22px}
+.aiHomePanel .aiSuggGrid button{padding:13px 14px}
+.aiHomePanel .aiSuggGrid button b{font-size:15px}
 /* Template gallery */
 .tplCard{border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
 .tplCard:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(76,29,149,.15);border-color:rgba(124,58,237,.35)}
@@ -1061,10 +1071,10 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
           <p>No blank-page stress. Tell the AI what your page is about and it drafts the headline, description, button, theme colour and feature cards — straight into the builder, ready for you to fine-tune, add ads and publish. AI follows your description strictly: it builds only what you describe and adds nothing extra — no invented features, sections or claims.</p>
           <ol class="aiSteps">
             <li><b>1</b><span><b>Pick a ready prompt or describe your page</b> — tap a suggestion for a restaurant, portfolio, shop, gym, salon, course, event or service business and it fills the box for you, or write your own: what it sells or offers, who it is for, and what the button should do.</span></li>
-            <li><b>2</b><span><b>AI drafts it in the builder</b> — only what your description asks for: headline, text, button and theme colour, applied to the live preview. Feature cards are made only if your description mentions features — if it doesn't, none are added.</span></li>
+            <li><b>2</b><span><b>AI drafts it in the builder</b> — only what your description asks for: headline, text, button, colours, font and layout, applied to the live preview. Feature cards, a price section or a testimonial are made only if your description mentions them — if it doesn't, none are added.</span></li>
             <li><b>3</b><span><b>Fine-tune &amp; publish</b> — change anything, add ad codes in the Ads tab, then publish with a public link.</span></li>
           </ol>
-          <div class="aiPts"><span>Headline &amp; text written for you</span><span>Colour &amp; features included</span><span>Everything stays editable</span><span>Free to try</span></div>
+          <div class="aiPts"><span>Headline &amp; text written for you</span><span>Design, colour &amp; features included</span><span>Everything stays editable</span><span>Free to try</span></div>
         </div>
         <div class="aiHomePanel">
           <p class="aiSuggHead">Ready prompt suggestions — tap one to use it</p>
@@ -1692,10 +1702,10 @@ function defaultEl(){return{
  badge:{color:"",bg:""},
  cta:{font:"",size:0,bg:"",color:"",radius:"",shadow:true}
 };}
-function blankState(){return{templateId:"blank",templateName:"Blank Page",plan:"Free",pageTitle:"My Landing Page",badge:"MY PAGE",headline:"Write your headline here",sub:"Add a short description that tells visitors exactly what this page offers and why they should stay.",ctaText:"Get Started",ctaUrl:"#",image:"",imageAlt:"Page image",footerText:"",font:"'Inter',sans-serif",color:"#000000",bg:"#FFFFFF",layout:"center",radius:"999px",imgRadius:16,showFeatures:true,showPrice:false,showProof:false,
- featCards:[{t:"Fast Setup",x:"Live in minutes, no coding needed.",icon:"01"},{t:"Mobile First",x:"Perfect on every screen size.",icon:"02"},{t:"Clear CTA",x:"One goal, one action, more results.",icon:"03"},{t:"Fast & Easy",x:"Everything on this page is set up and ready — customise the text and make it yours.",icon:"04"},{t:"Mobile Friendly",x:"Looks perfect on phone, tablet and desktop, so no visitor is ever lost.",icon:"05"}],
+function blankState(){return{templateId:"blank",templateName:"Blank Page",plan:"Free",pageTitle:"My Landing Page",badge:"WELCOME TO MY PAGE",headline:"A Page That Turns Visitors Into Customers",sub:"Everything about your offer on one clear page — what it is, why it matters, and exactly how to get it. Edit this text and make it yours in seconds.",ctaText:"Get Started",ctaUrl:"#",image:"",imageAlt:"Page image",footerText:"",font:"'Manrope',sans-serif",color:"#6D28D9",bg:"#FFFFFF",layout:"center",radius:"999px",imgRadius:16,showFeatures:true,showPrice:false,showProof:false,
+ featCards:[{t:"Made for Your Visitors",x:"Clear, focused and easy to act on — built around what your visitors actually want.",icon:"01"},{t:"Fast & Lightweight",x:"Loads in a blink on any connection, so nobody leaves before they see your offer.",icon:"02"},{t:"Perfect on Mobile",x:"Designed phone-first and polished on desktop too — flawless on every screen.",icon:"03"},{t:"One Clear Action",x:"Every section leads to a single button, so more visitors become customers.",icon:"04"},{t:"Ready to Earn",x:"Ad slots are built in — add your Adsterra or Monetag codes and start earning.",icon:"05"}],
  price:{amount:"Tk 999",old:"Tk 1,800",note:"Limited-time price — order before the offer ends."},
- proof:{quote:"“This page made everything so easy — I got results within the first week. Highly recommended!”",author:"— Happy Customer, Verified User"},
+ proof:{quote:"“This page made everything so easy — I got results within the first week. Highly recommended!”",author:"— Happy Customer"},
  blocks:[],ads:defaultAds(),showAds:true,hideAdLabels:true,pos:{desktop:{},mobile:{}},dev:defaultDev(),el:defaultEl(),publishedSlug:""};}
 function templateState(t){var s=blankState();s.templateId=t.id;s.templateName=t.name;s.plan=t.plan;s.pageTitle=t.name;s.badge=t.badge;s.headline=t.headline;s.sub=t.sub;s.ctaText=t.cta;s.color=t.color;s.showPrice=(t.cat==="E-commerce");s.showProof=true;if(t.font)s.font=t.font;if(t.bg)s.bg=t.bg;if(t.layout)s.layout=t.layout;if(t.radius)s.radius=t.radius;if(Array.isArray(t.feats)&&t.feats.length)s.featCards=t.feats;if(t.price){s.price=t.price;s.showPrice=true;}if(t.proof)s.proof=t.proof;s.blocks=[{type:"text",title:"",text:"Use the Blocks tab to add more headings, text, buttons and feature cards anywhere below the hero section. The 5 feature highlights above are all editable too — Content tab, Features section, or click a card in the preview."}];return s;}
 function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -2204,7 +2214,7 @@ function onSlugInput(){updatePublishUI();}
 function updatePublishUI(){if(!state)return;var slug=currentSlug();var path="/p/"+slug;var pp=document.getElementById("publishPath");if(pp)pp.textContent=path;var up=document.getElementById("urlPill");if(up)up.textContent=path;var btn=document.getElementById("publishBtn");if(btn&&state.publishedSlug===slug)btn.textContent="Update Published Page";else if(btn)btn.textContent="Publish — Host on This Domain";}
 function publishPage(){
  if(!state){toast("Open the builder first");return;}
- if(!state.headline.trim()||state.headline==="Write your headline here"){toast("Add a real headline before publishing");switchTab("content");return;}
+ if(!state.headline.trim()||state.headline==="A Page That Turns Visitors Into Customers"){toast("Add a real headline before publishing");switchTab("content");return;}
  var slug=currentSlug();state.publishedSlug=slug;
  var snap=clone(state);
  var btn=document.getElementById("publishBtn");
