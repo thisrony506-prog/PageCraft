@@ -1830,7 +1830,7 @@ function aiApply(obj){
  if(v=str(obj.badge)){state.badge=v;changed=true;}
  if(v=str(obj.headline)){state.headline=v;changed=true;}
  if(v=str(obj.sub)){state.sub=v;changed=true;}
- if(v=str(obj.ctaText)){state.ctaText=v;changed=true;}
+ if(v=str(obj.ctaText)||str(obj.buttonText)){state.ctaText=v;changed=true;}
  if(v=str(obj.ctaUrl)&&/^https?:\/\//i.test(v))state.ctaUrl=v;
  if(typeof obj.color==="string"&&/^#[0-9a-fA-F]{6}$/.test(obj.color.trim())){state.color=obj.color.trim();changed=true;}
  if(typeof obj.font==="string"&&FONTS.some(function(f){return f[0]===obj.font.trim();})){state.font=obj.font.trim();changed=true;}
