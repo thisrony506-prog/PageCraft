@@ -23,16 +23,16 @@ function aiClean(out) {
     badge: aiStr(out.badge, 60),
     headline: aiStr(out.headline, 160),
     sub: aiStr(out.sub, 300),
-    buttonText: aiStr(out.buttonText, 60),
-    ctaText: aiStr(out.buttonText, 60),
+    buttonText: aiStr(out.buttonText, 60) || aiStr(out.ctaText, 60),
+    ctaText: aiStr(out.buttonText, 60) || aiStr(out.ctaText, 60),
     color: aiHex(out.color, '#111111'),
     bg: aiHex(out.bg, '#FFFFFF'),
     font: AI_FONTS.indexOf(out.font) > -1 ? out.font : "'Inter',sans-serif",
     layout: ['center', 'split', 'left'].indexOf(out.layout) > -1 ? out.layout : 'center',
     radius: ['999px', '12px', '4px'].indexOf(out.radius) > -1 ? out.radius : '999px',
     features: Array.isArray(out.features) ? out.features.filter(function (f) {
-      return f && typeof f.title === 'string' && typeof f.text === 'string';
-    }).slice(0, 6).map(function (f) { return { title: aiStr(f.title, 80), text: aiStr(f.text, 160) }; }) : [],
+      return f && (typeof f.title === 'string' || typeof f.t === 'string');
+    }).slice(0, 6).map(function (f) { return { title: aiStr(f.title || f.t, 80), text: aiStr(f.text || f.x, 160) }; }) : [],
     price: (out.price && aiStr(out.price.amount, 40)) ? { amount: aiStr(out.price.amount, 40), old: aiStr(out.price.old, 40), note: aiStr(out.price.note, 160) } : null,
     proof: (out.proof && aiStr(out.proof.quote, 300)) ? { quote: aiStr(out.proof.quote, 300), author: aiStr(out.proof.author, 80) } : null
   };
