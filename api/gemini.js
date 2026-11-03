@@ -14,10 +14,42 @@ function extractJson(text) {
   return null;
 }
 
+var AI_FONTS = ["'Inter',sans-serif", "'Poppins',sans-serif", "'Manrope',sans-serif", "'Playfair Display',serif", "'Space Grotesk',sans-serif", "'Montserrat',sans-serif", "'DM Sans',sans-serif", "'Sora',sans-serif", "'Work Sans',sans-serif", "'Raleway',sans-serif", "'Oswald',sans-serif", "'Lora',serif", "'Fraunces',serif", "Georgia,serif"];
+function aiStr(v, max) { return typeof v === 'string' ? v.trim().slice(0, max || 300) : ''; }
+function aiHex(v, fb) { return typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v.trim()) ? v.trim() : fb; }
+function aiClean(out) {
+  return {
+    pageTitle: aiStr(out.pageTitle, 80),
+    badge: aiStr(out.badge, 60),
+    headline: aiStr(out.headline, 160),
+    sub: aiStr(out.sub, 300),
+    buttonText: aiStr(out.buttonText, 60),
+    ctaText: aiStr(out.buttonText, 60),
+    color: aiHex(out.color, '#111111'),
+    bg: aiHex(out.bg, '#FFFFFF'),
+    font: AI_FONTS.indexOf(out.font) > -1 ? out.font : "'Inter',sans-serif",
+    layout: ['center', 'split', 'left'].indexOf(out.layout) > -1 ? out.layout : 'center',
+    radius: ['999px', '12px', '4px'].indexOf(out.radius) > -1 ? out.radius : '999px',
+    features: Array.isArray(out.features) ? out.features.filter(function (f) {
+      return f && typeof f.title === 'string' && typeof f.text === 'string';
+    }).slice(0, 6).map(function (f) { return { title: aiStr(f.title, 80), text: aiStr(f.text, 160) }; }) : [],
+    price: (out.price && aiStr(out.price.amount, 40)) ? { amount: aiStr(out.price.amount, 40), old: aiStr(out.price.old, 40), note: aiStr(out.price.note, 160) } : null,
+    proof: (out.proof && aiStr(out.proof.quote, 300)) ? { quote: aiStr(out.proof.quote, 300), author: aiStr(out.proof.author, 80) } : null
+  };
+}
+
 async function callGemini(model, apiKey, prompt) {
-  var system = 'You are a landing page copy assistant. Reply with ONLY a JSON object, no markdown, no explanation, with these fields: ' +
-    'headline (string), sub (string), buttonText (string), color (a hex colour like #111111), ' +
-    'features (array of up to 6 objects, each with title and text strings). ' +
+  var system = 'You are a landing page copy assistant. STRICT RULE: do exactly what the user describes and nothing more. ' +
+    'Do not invent features, sections, buttons, prices, locations, testimonials or any facts the user did not mention. ' +
+    'Reply with ONLY a JSON object, no markdown, no explanation, with these fields: ' +
+    'pageTitle (string), badge (short uppercase string), headline (string), sub (string), buttonText (string), ' +
+    'color (a hex colour like #111111 — the theme colour that fits the business), ' +
+    'bg (a hex page background — light like #FFFFFF unless the user asks for a dark page), ' +
+    'font (exactly one of: "\'Inter\',sans-serif", "\'Poppins\',sans-serif", "\'Manrope\',sans-serif", "\'Playfair Display\',serif", "\'Space Grotesk\',sans-serif", "\'Montserrat\',sans-serif", "\'DM Sans\',sans-serif", "\'Sora\',sans-serif", "\'Work Sans\',sans-serif", "\'Raleway\',sans-serif", "\'Oswald\',sans-serif", "\'Lora\',serif", "\'Fraunces\',serif", "Georgia,serif" — pick the one that fits the page mood), ' +
+    'layout (one of: "center", "split", "left"), radius (one of: "999px", "12px", "4px"), ' +
+    'features (array of up to 6 objects, each with title and text strings, only for features the user actually described), ' +
+    'price (object with amount, old and note strings — ONLY when the user mentions a price, an offer or something for sale; otherwise null), ' +
+    'proof (object with quote and author strings — ONLY when the user includes or asks for a testimonial or review; otherwise null). ' +
     'Keep the copy short, professional and in the same language as the user prompt.';
   var r = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + encodeURIComponent(apiKey),
@@ -99,15 +131,7 @@ module.exports = async function handler(req, res) {
       if (!text) { lastErr = { message: 'empty response from model' }; continue; }
       var out = extractJson(text);
       if (!out) { lastErr = { message: 'unparseable model response' }; continue; }
-      var clean = {
-        headline: typeof out.headline === 'string' ? out.headline : '',
-        sub: typeof out.sub === 'string' ? out.sub : '',
-        buttonText: typeof out.buttonText === 'string' ? out.buttonText : '',
-        color: typeof out.color === 'string' && /^#[0-9a-fA-F]{6}$/.test(out.color) ? out.color : '#111111',
-        features: Array.isArray(out.features) ? out.features.filter(function (f) {
-          return f && typeof f.title === 'string' && typeof f.text === 'string';
-        }).slice(0, 6).map(function (f) { return { title: f.title, text: f.text }; }) : []
-      };
+      var clean = aiClean(out);
       res.status(200).json(clean);
       return;
     }
